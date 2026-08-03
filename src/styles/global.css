@@ -21,12 +21,21 @@
   padding: 0;
 }
 
+html {
+  /* `clip` (not `hidden`) contains any stray sub-pixel of horizontal overflow
+     so it can't create a 1px horizontal scroll / white strip on the right on
+     mobile — without turning the root into a scroll container, which would
+     break the sticky header. */
+  overflow-x: clip;
+}
+
 body {
   font-family: var(--font-body);
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
