@@ -244,7 +244,7 @@ const coverageCities = [
             Escríbenos directamente por WhatsApp y uno de nuestros asesores te atenderá.
           </p>
           
-          <a href="https://wa.me/51934336181?text=Hola!%20Quiero%20solicitar%20una%20cotizaci%C3%B3n%20de%20prendas." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-wix">
+          <a href={`https://wa.me/51934336181?text=${encodeURIComponent('Hola, buen día 👋 Vengo desde su página web fairscompany.com y quisiera solicitar una cotización de prendas personalizadas. ¿Me podrían orientar?')}`} target="_blank" rel="noopener noreferrer" class="btn-whatsapp-wix">
             CONTACTAR POR WHATSAPP
           </a>
 
@@ -357,7 +357,7 @@ const coverageCities = [
         personalizacion: 'Personalización',
         mensaje: 'Mensaje',
       };
-      const lines = ['Hola! Quiero solicitar una cotización.', ''];
+      const lines = ['Hola, buen día 👋 Vengo desde su página web fairscompany.com y quisiera solicitar una cotización con los siguientes datos:', ''];
       for (const [key, label] of Object.entries(labels)) {
         const value = (data.get(key) || '').toString().trim();
         if (value) lines.push(`${label}: ${value}`);

@@ -133,7 +133,7 @@ const products = getActiveProducts().slice(0, 8);
 
       <div class="action-btn-wrapper scroll-animate" style="margin-top: 4rem; display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
         <a href="/productos" class="btn-outline-orange">VER TODOS LOS PRODUCTOS</a>
-        <a href="https://wa.me/51934336181?text=Hola!%20Quiero%20solicitar%20una%20cotizaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-solid">
+        <a href={`https://wa.me/51934336181?text=${encodeURIComponent('Hola, buen día 👋 Vengo desde su página web fairscompany.com y quisiera solicitar una cotización de prendas personalizadas. ¿Me podrían ayudar?')}`} target="_blank" rel="noopener noreferrer" class="btn-whatsapp-solid">
           ESCRÍBENOS POR WHATSAPP
         </a>
       </div>

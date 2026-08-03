@@ -95,7 +95,7 @@ const WHATSAPP_NUMBER = '51934336181';
     waButton.addEventListener('click', () => {
       const quantity = Math.max(1, Number(quantityInput.value) || 1);
       const productName = titleEl.textContent;
-      const message = `Hola! Quiero cotizar ${quantity} unidad(es) de "${productName}".`;
+      const message = `Hola, buen día 👋 Vengo desde su página web fairscompany.com y me interesa cotizar ${quantity} unidad(es) de "${productName}". ¿Me podrían enviar más información?`;
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
       window.open(url, '_blank', 'noopener,noreferrer');
     });
