@@ -27,7 +27,7 @@ const track = [...phrases, ...phrases];
 ---
 
 <div class="fabric-strip" aria-hidden="true">
-  <div class="fabric-track">
+  <div class="fabric-track" id="fabric-track">
     {track.map((item) => (
       <span class="fabric-item">
         <svg class="fabric-icon" viewBox="0 0 24 24" fill="none" set:html={icons[item.icon]} />
@@ -36,6 +36,31 @@ const track = [...phrases, ...phrases];
     ))}
   </div>
 </div>
+
+<script>
+  // JS-driven marquee: the CSS keyframe version froze on several mobile
+  // browsers (reduced-motion / off-screen throttling). requestAnimationFrame
+  // moves it smoothly and reliably on every device. The track is duplicated,
+  // so resetting by half its width gives a seamless infinite loop.
+  const track = document.getElementById('fabric-track');
+  if (track) {
+    const SPEED = 45; // px per second
+    let offset = 0;
+    let last = performance.now();
+
+    function step(now: number) {
+      const dt = (now - last) / 1000;
+      last = now;
+      offset -= SPEED * dt;
+      const half = track!.scrollWidth / 2;
+      if (half > 0 && -offset >= half) offset += half;
+      track!.style.transform = `translateX(${offset}px)`;
+      requestAnimationFrame(step);
+    }
+
+    requestAnimationFrame(step);
+  }
+</script>
 
 <style>
   .fabric-strip {
@@ -47,7 +72,7 @@ const track = [...phrases, ...phrases];
   .fabric-track {
     display: flex;
     width: max-content;
-    animation: fabric-scroll 32s linear infinite;
+    will-change: transform;
   }
 
   .fabric-item {
@@ -73,15 +98,6 @@ const track = [...phrases, ...phrases];
 
   .fabric-item:not(:last-child)::after {
     content: '';
-  }
-
-  @keyframes fabric-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .fabric-track { animation: none; }
   }
 
   @media (max-width: 768px) {

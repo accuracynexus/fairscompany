@@ -91,6 +91,32 @@ const { slides } = Astro.props;
     carousel.addEventListener('mouseenter', stopAutoplay);
     carousel.addEventListener('mouseleave', startAutoplay);
 
+    // Swipe en móvil: arrastrar con el dedo para avanzar / retroceder.
+    let touchX = 0;
+    let touchY = 0;
+    carousel.addEventListener(
+      'touchstart',
+      (e) => {
+        touchX = e.changedTouches[0].screenX;
+        touchY = e.changedTouches[0].screenY;
+      },
+      { passive: true }
+    );
+    carousel.addEventListener(
+      'touchend',
+      (e) => {
+        const dx = e.changedTouches[0].screenX - touchX;
+        const dy = e.changedTouches[0].screenY - touchY;
+        // Solo si el gesto es claramente horizontal (no al hacer scroll vertical).
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
+          show(current + (dx < 0 ? 1 : -1));
+          stopAutoplay();
+          startAutoplay();
+        }
+      },
+      { passive: true }
+    );
+
     startAutoplay();
   }
 </script>
@@ -106,6 +132,8 @@ const { slides } = Astro.props;
     overflow: hidden;
     margin-top: 0;
     padding-top: 0;
+    /* Dark backdrop so no white page ever shows through during a crossfade. */
+    background-color: #0e0e0e;
   }
 
   .hero-slide {
@@ -115,12 +143,18 @@ const { slides } = Astro.props;
     align-items: center;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 1s ease;
+    z-index: 0;
+    /* The outgoing slide stays fully visible for the whole fade (visibility
+       flips to hidden only after it finishes), while the incoming slide sits
+       on top and fades in — a clean crossfade with no white flash between. */
+    transition: opacity 1.1s ease, visibility 0s linear 1.1s;
   }
 
   .hero-slide.active {
     opacity: 1;
     visibility: visible;
+    z-index: 1;
+    transition: opacity 1.1s ease, visibility 0s;
   }
 
   .hero-bg {
