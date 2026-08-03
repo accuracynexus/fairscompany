@@ -1,11 +1,30 @@
 services:
   web:
     build: .
-    ports:
-      - "4321:4321"
+    # Not published to the host directly — Caddy reverse-proxies to it over the
+    # internal network and terminates HTTPS. `expose` keeps 4321 container-only.
+    expose:
+      - "4321"
     env_file:
       - .env
     volumes:
       - ./data:/app/data
       - ./uploads:/app/uploads
     restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+    depends_on:
+      - web
+
+volumes:
+  caddy_data:
+  caddy_config:

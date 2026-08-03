@@ -1,0 +1,12 @@
+# Reverse proxy with automatic HTTPS (Let's Encrypt) for Fair's Company.
+# Caddy obtains and renews the TLS certificate on its own once the domain's
+# DNS points to this server. www redirects to the canonical apex domain.
+
+fairscompany.com {
+	reverse_proxy web:4321
+	encode gzip zstd
+}
+
+www.fairscompany.com {
+	redir https://fairscompany.com{uri} permanent
+}
