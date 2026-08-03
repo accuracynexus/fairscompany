@@ -73,16 +73,6 @@ const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
     28% { transform: rotate(-2deg); }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .wa-button::before {
-      animation: none;
-      display: none;
-    }
-    .wa-button svg {
-      animation: none;
-    }
-  }
-
   @media (max-width: 480px) {
     .wa-button {
       width: 52px;
