@@ -1,0 +1,280 @@
+---
+const WHATSAPP_NUMBER = '51934336181';
+---
+
+<div id="quick-view-modal" class="qv-modal" aria-hidden="true">
+  <div class="qv-backdrop" data-qv-close></div>
+  <div class="qv-panel" role="dialog" aria-modal="true" aria-labelledby="qv-title">
+    <button type="button" class="qv-close" data-qv-close aria-label="Cerrar">&times;</button>
+
+    <div class="qv-image-wrap">
+      <img id="qv-image" class="qv-image" src="" alt="" />
+    </div>
+
+    <div class="qv-body">
+      <p class="qv-eyebrow">Vista rápida</p>
+      <h2 id="qv-title" class="qv-product-name">Producto</h2>
+
+      <div class="qv-field">
+        <label for="qv-quantity">Cantidad</label>
+        <div class="qv-stepper">
+          <button type="button" class="qv-step-btn" data-qv-step="-1" aria-label="Disminuir cantidad">&minus;</button>
+          <input type="number" id="qv-quantity" name="quantity" min="1" value="1" inputmode="numeric" />
+          <button type="button" class="qv-step-btn" data-qv-step="1" aria-label="Aumentar cantidad">+</button>
+        </div>
+      </div>
+
+      <button type="button" id="qv-whatsapp-btn" class="qv-whatsapp-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" class="qv-wa-icon">
+          <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-23.1-115-65-157zM223.9 414.7c-33.1 0-65.5-8.9-94-25.7l-6.7-4-69.8 18.3L72 334.1l-4.4-7.1c-18.4-29.6-28.1-64-28.1-99.1 0-103.5 84.3-187.8 187.9-187.8 50.2 0 97.4 19.5 132.9 55.1 35.5 35.6 55.1 82.7 55.1 133 0 103.6-84.3 187.8-187.9 187.8zM326.6 280c-5.6-2.8-33.3-16.4-38.5-18.3-5.2-1.9-9-2.8-12.8 2.8-3.7 5.6-14.6 18.3-17.9 22.1-3.3 3.8-6.6 4.2-12.2 1.4-5.6-2.8-23.7-8.8-45.2-28.1-16.7-15-28-33.5-31.3-39.1-3.3-5.6-.3-8.6 2.5-11.4 2.5-2.5 5.6-6.6 8.5-9.9 2.8-3.3 3.8-5.6 5.6-9.4 1.9-3.7.9-7.1-.5-9.9-1.4-2.8-12.8-30.9-17.5-42.3-4.6-11.2-9.3-9.7-12.8-9.9-3.3-.2-7.1-.2-10.8-.2-3.7 0-9.9 1.4-15.1 7.1-5.2 5.6-19.8 19.3-19.8 47s20.2 54.4 23 58.2c2.8 3.8 39.7 60.6 96.1 85 13.4 5.8 23.9 9.3 32.1 11.9 13.5 4.3 25.8 3.7 35.5 2.2 10.9-1.7 33.3-13.6 38-26.8 4.6-13.2 4.6-24.4 3.3-26.8-1.4-2.4-5.2-3.8-10.8-6.6z"/>
+        </svg>
+        Cotizar por WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ WHATSAPP_NUMBER }}>
+  const modal = document.getElementById('quick-view-modal');
+
+  if (modal) {
+    const titleEl = modal.querySelector('#qv-title');
+    const imageEl = modal.querySelector('#qv-image');
+    const imageWrap = modal.querySelector('.qv-image-wrap');
+    const quantityInput = modal.querySelector('#qv-quantity');
+    const waButton = modal.querySelector('#qv-whatsapp-btn');
+    let lastFocused = null;
+
+    function openModal(productName, productImage) {
+      titleEl.textContent = productName;
+      quantityInput.value = '1';
+
+      if (productImage) {
+        imageEl.src = productImage;
+        imageEl.alt = productName;
+        imageWrap.style.display = '';
+      } else {
+        imageEl.src = '';
+        imageWrap.style.display = 'none';
+      }
+
+      lastFocused = document.activeElement;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      quantityInput.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (lastFocused) lastFocused.focus();
+    }
+
+    document.addEventListener('click', (e) => {
+      const card = e.target.closest('.product-card');
+      if (card) {
+        openModal(card.dataset.productName || 'Producto', card.dataset.productImage || '');
+      }
+      if (e.target.closest('[data-qv-close]')) {
+        closeModal();
+      }
+      const stepBtn = e.target.closest('[data-qv-step]');
+      if (stepBtn) {
+        const delta = Number(stepBtn.dataset.qvStep);
+        const next = Math.max(1, (Number(quantityInput.value) || 1) + delta);
+        quantityInput.value = String(next);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    });
+
+    waButton.addEventListener('click', () => {
+      const quantity = Math.max(1, Number(quantityInput.value) || 1);
+      const productName = titleEl.textContent;
+      const message = `Hola! Quiero cotizar ${quantity} unidad(es) de "${productName}".`;
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    });
+  }
+</script>
+
+<style>
+  .qv-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease;
+  }
+  .qv-modal.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .qv-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 15, 15, 0.65);
+    backdrop-filter: blur(4px);
+  }
+
+  .qv-panel {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 380px;
+    margin: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+    transform: scale(0.94) translateY(10px);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .qv-modal.open .qv-panel {
+    transform: scale(1) translateY(0);
+  }
+
+  .qv-close {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    z-index: 2;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: #444;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+  .qv-close:hover {
+    color: var(--color-accent);
+    transform: rotate(90deg);
+  }
+
+  /* Square frame to match the product photos, so the image fills it fully. */
+  .qv-image-wrap {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .qv-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .qv-body {
+    padding: 1.8rem 2rem 2.2rem;
+  }
+
+  .qv-eyebrow {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--color-accent);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  .qv-product-name {
+    font-size: 1.3rem;
+    line-height: 1.3;
+    margin-bottom: 1.6rem;
+  }
+
+  .qv-field { margin-bottom: 1.8rem; }
+  .qv-field > label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #777;
+    margin-bottom: 0.6rem;
+  }
+
+  .qv-stepper {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 160px;
+  }
+  .qv-step-btn {
+    width: 40px;
+    flex-shrink: 0;
+    background: #f4f1ef;
+    border: none;
+    color: var(--color-text);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .qv-step-btn:hover { background: #e9e3df; }
+
+  .qv-stepper input {
+    width: 100%;
+    border: none;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    text-align: center;
+    padding: 0.7rem 0.5rem;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    -moz-appearance: textfield;
+  }
+  .qv-stepper input::-webkit-outer-spin-button,
+  .qv-stepper input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .qv-stepper input:focus {
+    outline: none;
+  }
+
+  .qv-whatsapp-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    padding: 1rem;
+    background: var(--color-whatsapp);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.25);
+  }
+  .qv-whatsapp-btn:hover {
+    background: #1fb956;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(37, 211, 102, 0.35);
+  }
+  .qv-wa-icon { width: 20px; height: 20px; }
+</style>

@@ -1,0 +1,96 @@
+---
+const phrases = [
+  { text: 'TELAS PREMIUM SELECCIONADAS', icon: 'fabric' },
+  { text: 'CONFECCIÓN A MEDIDA', icon: 'scissors' },
+  { text: 'COSTURA DE PRECISIÓN', icon: 'needle' },
+  { text: 'DISEÑOS PERSONALIZADOS', icon: 'ruler' },
+  { text: 'ESTILO QUE REPRESENTA TU MARCA', icon: 'shirt' },
+  { text: 'CALIDAD QUE DURA EN EL TIEMPO', icon: 'sparkle' },
+];
+
+const icons: Record<string, string> = {
+  fabric:
+    '<path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+  scissors:
+    '<circle cx="6" cy="6" r="2.2" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="18" r="2.2" stroke="currentColor" stroke-width="1.8"/><path d="M7.6 7.6L20 18M7.6 16.4L20 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+  needle:
+    '<path d="M4 20L15 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="17.5" cy="6.5" r="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c1.5-1.5 3-1 4 0M6 15c1 1 1.5 2.5 0 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>',
+  ruler:
+    '<rect x="3" y="9" width="18" height="6" rx="1" transform="rotate(-15 12 12)" stroke="currentColor" stroke-width="1.8"/><path d="M8 10l-1 3M12 9l-1 3M16 8l-1 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" transform="rotate(-15 12 12)"/>',
+  shirt:
+    '<path d="M8 4l4 2 4-2 4 4-3 3v9H7v-9L4 8l4-4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
+  sparkle:
+    '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+};
+
+const track = [...phrases, ...phrases];
+---
+
+<div class="fabric-strip" aria-hidden="true">
+  <div class="fabric-track">
+    {track.map((item) => (
+      <span class="fabric-item">
+        <svg class="fabric-icon" viewBox="0 0 24 24" fill="none" set:html={icons[item.icon]} />
+        <span>{item.text}</span>
+      </span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .fabric-strip {
+    background: #111111;
+    overflow: hidden;
+    padding: 1.1rem 0;
+  }
+
+  .fabric-track {
+    display: flex;
+    width: max-content;
+    animation: fabric-scroll 32s linear infinite;
+  }
+
+  .fabric-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    white-space: nowrap;
+    padding: 0 2.5rem;
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .fabric-icon {
+    width: 22px;
+    height: 22px;
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  .fabric-item:not(:last-child)::after {
+    content: '';
+  }
+
+  @keyframes fabric-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fabric-track { animation: none; }
+  }
+
+  @media (max-width: 768px) {
+    .fabric-item {
+      padding: 0 1.5rem;
+      font-size: 0.78rem;
+      letter-spacing: 1px;
+      gap: 0.5rem;
+    }
+    .fabric-icon { width: 18px; height: 18px; }
+  }
+</style>

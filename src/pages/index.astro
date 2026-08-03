@@ -1,0 +1,557 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import HeroCarousel from '../components/HeroCarousel.astro';
+import FabricStrip from '../components/FabricStrip.astro';
+import ProductCard from '../components/ProductCard.astro';
+import nosotrosImg from '../img/secciones/nosotros.jpg';
+import lineaImg from '../img/secciones/linea.jpg';
+import cotizacionImg from '../img/secciones/cotizacion.jpg';
+import companyImg from '../img/secciones/company.jpg';
+import { getHeroSlides, getActiveProducts, resolveProductImage } from '../db/client';
+import { resolveHeroSlides } from '../lib/hero';
+
+export const prerender = false;
+
+const heroSlides = resolveHeroSlides(getHeroSlides());
+const products = getActiveProducts().slice(0, 8);
+---
+
+<Layout
+	title="Inicio"
+	description="Fabricante peruano de uniformes y prendas personalizadas con más de 30 años de experiencia. Confección de uniformes corporativos, escolares, médicos e industriales, casacas de promoción y merchandising. Cotiza a nivel nacional."
+>
+  <HeroCarousel slides={heroSlides} />
+  <FabricStrip />
+
+  <!-- 3-Column Info Cards Section -->
+  <section class="section cards-container-section">
+    <div class="container">
+      <div class="info-cards-section">
+        <div class="info-card scroll-animate">
+          <Image src={nosotrosImg} width={600} height={780} alt="Nosotros" />
+          <div class="card-overlay-wix">
+            <div class="text-box white-box">
+              <span>NOSOTROS</span>
+            </div>
+            <div class="arrow-box border-orange">
+              <a href="/nosotros" class="arrow">&rarr;</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="info-card scroll-animate animate-delay-1">
+          <Image src={lineaImg} width={600} height={780} alt="Línea de Productos" />
+          <div class="card-overlay-wix">
+            <div class="text-box orange-box">
+              <span>LÍNEA DE PRODUCTOS</span>
+            </div>
+            <div class="arrow-box border-white">
+              <a href="/productos" class="arrow">&rarr;</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="info-card scroll-animate animate-delay-2">
+          <Image src={cotizacionImg} width={600} height={780} alt="Solicita tu Cotización" />
+          <div class="card-overlay-wix">
+            <div class="text-box white-box">
+              <span>SOLICITA TU COTIZACIÓN</span>
+            </div>
+            <div class="arrow-box border-orange">
+              <a href="/contacto" class="arrow">&rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Wave Divider -->
+    <div class="wave-divider">
+      <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,12.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,42.4V0Z" class="shape-fill" opacity="0.3"></path>
+        <path d="M0,0V15.81c13,10.09,27.54,16,43,18.77,80.55,14.45,155.06-25.85,232.38-29.05C351,4,424.3,34.3,497.07,46.74c71.69,12.24,142.26,9.53,212.87-5.67,61.58-13.25,122.26-31.25,183-40.39C967,1,1088.58,22.9,1200,61.35V0Z" class="shape-fill" opacity="0.5"></path>
+        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c127.61-22.7,268.28-87.05,393.12-50.3C989,29,1098,75.5,1200,32.48V0Z" class="shape-fill"></path>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Brand Focus Section (Orange sidebar design) -->
+  <section class="brand-focus-section">
+    <div class="brand-circles" aria-hidden="true">
+      <span class="deco-circle" style="width:420px; height:420px; top:-160px; right:-140px; opacity:0.10;"></span>
+      <span class="deco-circle" style="width:300px; height:300px; bottom:-140px; left:-100px; opacity:0.08;"></span>
+      <span class="deco-circle" style="width:140px; height:140px; top:18%; left:8%; opacity:0.09;"></span>
+      <span class="deco-circle" style="width:110px; height:110px; bottom:14%; right:12%; opacity:0.08;"></span>
+      <span class="deco-circle" style="width:180px; height:180px; top:2%; left:44%; opacity:0.06;"></span>
+      <span class="deco-circle" style="width:60px; height:60px; top:32%; left:3%; opacity:0.14;"></span>
+      <span class="deco-circle" style="width:92px; height:92px; top:44%; right:6%; opacity:0.07;"></span>
+      <span class="deco-circle" style="width:52px; height:52px; bottom:22%; left:28%; opacity:0.12;"></span>
+    </div>
+    <div class="brand-focus-fade"></div>
+    <div class="container focus-grid">
+      <div class="focus-text scroll-animate">
+        <div class="brand-title-wix">
+          <div class="orange-bg-block">
+            <h2>FAIR'S</h2>
+          </div>
+          <h2 class="company-text">COMPANY</h2>
+        </div>
+        <p class="brand-desc">
+          Cada prenda es confeccionada con materiales de calidad y atención personalizada para garantizar un resultado que represente la identidad de nuestros clientes.
+        </p>
+        <a href="/nosotros" class="btn-outline-orange">LEER MÁS</a>
+      </div>
+      <div class="focus-image scroll-animate animate-delay-1">
+        <div class="focus-image-wrapper">
+          <Image src={companyImg} width={600} height={750} alt="Uniformes Deportivos y Corporativos" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Soft white blend between the Fair's Company and Product Lines sections -->
+  <div class="section-seam">
+    <span class="section-seam-text">Encuentra tu estilo con nosotros</span>
+  </div>
+
+  <!-- Product Lines Intro Section -->
+  <section class="section product-lines-section">
+    <div class="container text-center">
+      <h2 class="section-title scroll-animate">Nuestras Líneas de Productos</h2>
+      
+      <div class="product-gallery">
+        {products.map((product, i) => (
+          <ProductCard
+            name={product.name}
+            category={product.category}
+            image={resolveProductImage(product.image_url)}
+            animateClass={`scroll-animate animate-delay-${(i % 3) + 1}`}
+          />
+        ))}
+      </div>
+
+      <div class="action-btn-wrapper scroll-animate" style="margin-top: 4rem; display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/productos" class="btn-outline-orange">VER TODOS LOS PRODUCTOS</a>
+        <a href="https://wa.me/51934336181?text=Hola!%20Quiero%20solicitar%20una%20cotizaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-solid">
+          ESCRÍBENOS POR WHATSAPP
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .text-center {
+    text-align: center;
+  }
+
+  /* 3-Column Info Cards Section */
+  .cards-container-section {
+    padding: 6rem 0 10rem; /* Padding at the bottom for the wave */
+    background-color: var(--color-accent);
+    position: relative;
+  }
+
+  .info-cards-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .info-card {
+    position: relative;
+    height: 580px;
+    overflow: hidden;
+    border-radius: 4px;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, opacity 0.5s ease-out;
+  }
+
+  .info-card:hover {
+    transform: translateY(-15px); /* Wave-like floating card hover effect */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+
+  .info-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .info-card:hover img {
+    transform: scale(1.05);
+  }
+
+  /* Wix overlay styling for the 3 columns */
+  .card-overlay-wix {
+    position: absolute;
+    bottom: 30px;
+    left: 20px;
+    right: 0;
+  }
+
+  .text-box {
+    position: relative;
+    width: 100%;
+    padding: 1rem 4.75rem 1rem 1.5rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: clamp(0.85rem, 1.7vw, 1.1rem);
+    letter-spacing: 0.3px;
+    border-radius: 2px;
+    text-align: left;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .text-box span {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .text-box.white-box {
+    background-color: #ffffff;
+    color: var(--color-accent);
+  }
+
+  .text-box.orange-box {
+    background-color: var(--color-accent);
+    color: #ffffff;
+  }
+
+  .arrow-box {
+    position: absolute;
+    right: 15px;
+    bottom: 0;
+    width: 60px;
+    height: 120px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 15px;
+    border-radius: 2px;
+    transition: background-color 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .arrow-box.border-orange {
+    border: 3px solid var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .arrow-box.border-white {
+    border: 3px solid #ffffff;
+    color: #ffffff;
+  }
+
+  .arrow-box .arrow {
+    color: inherit;
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+  }
+
+  .arrow-box:hover {
+    background-color: rgba(232, 93, 34, 0.2);
+  }
+
+  .arrow-box.border-white:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .arrow-box:hover .arrow {
+    transform: translateY(-5px);
+  }
+
+  /* Wave divider style */
+  .wave-divider {
+    position: absolute;
+    bottom: -95px; /* Top of the wave overlaps 5px up into the orange section: no seam line regardless of rounding */
+    left: -1px;
+    width: calc(100% + 2px);
+    overflow: hidden;
+    line-height: 0;
+    z-index: 10;
+  }
+
+  .wave-divider svg {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100px;
+  }
+
+  .wave-divider .shape-fill {
+    fill: var(--color-accent); /* Fill with orange hex #ea5823 */
+  }
+
+  /* Brand Focus Section (Orange sidebar design) */
+  .brand-focus-section {
+    position: relative;
+    padding: 8rem 0;
+    background-color: #fafafa;
+    overflow: hidden;
+  }
+
+  .brand-circles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .deco-circle {
+    position: absolute;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    .deco-circle {
+      transform: scale(0.65);
+    }
+  }
+
+  .brand-focus-fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 180px;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 85%);
+  }
+
+  .focus-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .focus-text {
+    position: relative;
+  }
+
+  .brand-title-wix {
+    margin-bottom: 2.5rem;
+    display: inline-block;
+  }
+
+  .orange-bg-block {
+    background-color: var(--color-accent);
+    padding: 0.5rem 2rem;
+    display: inline-block;
+  }
+
+  .orange-bg-block h2 {
+    color: #ffffff;
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: 2px;
+  }
+
+  .company-text {
+    color: var(--color-accent);
+    font-size: 3rem;
+    font-weight: 800;
+    margin-top: 0.5rem;
+    letter-spacing: 2px;
+    padding-left: 2rem;
+  }
+
+  .brand-desc {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 3rem;
+  }
+
+  .btn-outline-orange {
+    display: inline-block;
+    padding: 0.9rem 2.5rem;
+    border: 2px solid var(--color-accent);
+    color: var(--color-accent);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+  }
+
+  .btn-outline-orange:hover {
+    background: var(--color-accent);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(232, 93, 34, 0.2);
+  }
+
+  .focus-image {
+    display: flex;
+    justify-content: center;
+  }
+
+  .focus-image-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  .focus-image-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: 100%;
+    height: 100%;
+    border: 3px solid var(--color-accent);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .focus-image img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    border-radius: 2px;
+  }
+
+  /* Soft seam between Fair's Company and Product Lines sections */
+  .section-seam {
+    position: relative;
+    z-index: 5;
+    height: 0;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .section-seam-text {
+    position: relative;
+    top: -54px;
+    display: inline-block;
+    padding: 1.6rem 3.5rem;
+    font-family: 'Dancing Script', cursive;
+    font-weight: 600;
+    font-size: 2.1rem;
+    color: var(--color-accent);
+    background: radial-gradient(ellipse 340px 100px at center, #ffffff 0%, #ffffff 45%, rgba(255, 255, 255, 0) 78%);
+  }
+
+  @media (max-width: 768px) {
+    .section-seam-text {
+      font-size: 1.5rem;
+      padding: 1.2rem 1.5rem;
+      top: -40px;
+    }
+  }
+
+  /* Product Lines Intro Section */
+  .product-lines-section {
+    background: #ffffff;
+    padding: 8rem 0;
+  }
+
+  .section-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 4rem;
+    color: #444;
+    text-transform: uppercase;
+  }
+
+  .product-gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  @media (max-width: 991px) {
+    .product-gallery { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 560px) {
+    .product-gallery { grid-template-columns: 1fr; }
+  }
+
+  .btn-whatsapp-solid {
+    display: inline-block;
+    padding: 1.1rem 3rem;
+    background-color: var(--color-accent);
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(232, 93, 34, 0.3);
+  }
+
+  .btn-whatsapp-solid:hover {
+    background-color: var(--color-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(232, 93, 34, 0.4);
+  }
+
+  @media (max-width: 991px) {
+    .info-cards-section { grid-template-columns: 1fr; }
+    .info-card { height: 350px; }
+    .focus-grid { grid-template-columns: 1fr; gap: 4rem; }
+    .focus-image-wrapper { padding-left: 0; }
+    .focus-image-wrapper::before { display: none; }
+    .cards-container-section { padding: 4rem 0 7rem; }
+    .brand-focus-section { padding: 5rem 0; }
+    .product-lines-section { padding: 5rem 0; }
+    .section-title { font-size: 1.8rem; margin-bottom: 2.5rem; }
+  }
+
+  @media (max-width: 768px) {
+    .orange-bg-block h2,
+    .company-text {
+      font-size: 2.1rem;
+    }
+    .company-text { padding-left: 1rem; }
+    .brand-desc { font-size: 1rem; margin-bottom: 2rem; }
+    .info-card { height: 320px; }
+  }
+
+  @media (max-width: 480px) {
+    .cards-container-section { padding: 3rem 0 6rem; }
+    .brand-focus-section { padding: 3.5rem 0; }
+    .product-lines-section { padding: 3.5rem 0; }
+    .info-card { height: 280px; }
+    .text-box { padding: 0.85rem 4.25rem 0.85rem 1.1rem; height: 52px; }
+    .arrow-box { width: 50px; height: 100px; right: 10px; }
+    .orange-bg-block { padding: 0.4rem 1.3rem; }
+    .orange-bg-block h2,
+    .company-text {
+      font-size: 1.7rem;
+    }
+    .action-btn-wrapper { gap: 1rem !important; }
+    .btn-outline-orange,
+    .btn-whatsapp-solid { width: 100%; text-align: center; }
+  }
+</style>

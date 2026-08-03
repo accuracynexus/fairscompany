@@ -1,0 +1,286 @@
+---
+import type { HeroSlideView } from '../lib/hero';
+
+interface Props {
+  slides: HeroSlideView[];
+}
+
+const { slides } = Astro.props;
+---
+
+<section class="hero-carousel" id="hero-carousel">
+  {slides.map((slide, i) => (
+    <div class={`hero-slide ${i === 0 ? 'active' : ''} ${slide.editable ? 'is-editable' : ''}`} data-slide={i}>
+      <div class="hero-bg hero-bg--desktop" style={`background-image: url('${slide.image}')`}></div>
+      <div class="hero-bg hero-bg--mobile" style={`background-image: url('${slide.mobileImage}')`}></div>
+      {slide.editable && (
+        <>
+          <div class="hero-overlay"></div>
+          <div class="container hero-container">
+            <div class="hero-content">
+              {slide.title && <h1>{slide.title}</h1>}
+              {slide.title && <span class="hero-accent"></span>}
+              {slide.subtitle && <p class="hero-subtitle">{slide.subtitle}</p>}
+              {slide.cta && (
+                <div class="hero-cta">
+                  <a href={slide.link} class="hero-btn">
+                    <span>{slide.cta}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  ))}
+
+  <button class="hero-arrow hero-arrow-prev" aria-label="Anterior" data-dir="-1">&#10094;</button>
+  <button class="hero-arrow hero-arrow-next" aria-label="Siguiente" data-dir="1">&#10095;</button>
+
+  <div class="hero-dots">
+    {slides.map((_, i) => (
+      <button class={`hero-dot ${i === 0 ? 'active' : ''}`} data-slide-target={i} aria-label={`Ir al slide ${i + 1}`}></button>
+    ))}
+  </div>
+</section>
+
+<script>
+  const carousel = document.getElementById('hero-carousel');
+  if (carousel) {
+    const slides = Array.from(carousel.querySelectorAll<HTMLElement>('.hero-slide'));
+    const dots = Array.from(carousel.querySelectorAll<HTMLButtonElement>('.hero-dot'));
+    let current = 0;
+    let timer: ReturnType<typeof setInterval>;
+
+    function show(index: number) {
+      current = (index + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle('active', i === current));
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+
+    function next() {
+      show(current + 1);
+    }
+
+    function startAutoplay() {
+      timer = setInterval(next, 6000);
+    }
+
+    function stopAutoplay() {
+      clearInterval(timer);
+    }
+
+    carousel.querySelectorAll<HTMLButtonElement>('.hero-arrow').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        show(current + Number(btn.dataset.dir));
+        stopAutoplay();
+        startAutoplay();
+      });
+    });
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        show(Number(dot.dataset.slideTarget));
+        stopAutoplay();
+        startAutoplay();
+      });
+    });
+
+    carousel.addEventListener('mouseenter', stopAutoplay);
+    carousel.addEventListener('mouseleave', startAutoplay);
+
+    startAutoplay();
+  }
+</script>
+
+<style>
+  /* The carousel matches the images' aspect ratio so each banner shows in full
+     — full width and full height — without cropping. Desktop images are ~2.31:1
+     (fixed slides 3 & 4 are exactly this, so their baked text is never cut). */
+  .hero-carousel {
+    aspect-ratio: 1905 / 825;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s ease;
+  }
+
+  .hero-slide.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    z-index: 0;
+  }
+
+  /* Desktop shows the wide image; phones swap to the portrait (responsive) one. */
+  .hero-bg--mobile { display: none; }
+
+  @media (max-width: 768px) {
+    .hero-bg--desktop { display: none; }
+    .hero-bg--mobile { display: block; }
+  }
+
+  /* Legibility gradient only under the editable slides' text (left side). The
+     fixed slides carry their own baked text and must not be dimmed. */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.15) 45%, rgba(0, 0, 0, 0) 70%);
+    z-index: 1;
+  }
+
+  .hero-container { width: 100%; position: relative; z-index: 2; }
+
+  .hero-content {
+    color: #ffffff;
+    max-width: 620px;
+    text-align: left;
+  }
+
+  .hero-content h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.9rem, 3.1vw, 3.15rem);
+    color: #ffffff;
+    margin: 0;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+    line-height: 1.08;
+    letter-spacing: 0.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .hero-accent {
+    display: block;
+    width: 68px;
+    height: 4px;
+    background: var(--color-accent);
+    border-radius: 2px;
+    margin: 1.4rem 0;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    font-weight: 400;
+    line-height: 1.55;
+    max-width: 470px;
+    margin: 0 0 2rem;
+    color: #f1f1f1;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    background-color: var(--color-accent);
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 1rem 2.2rem;
+    border-radius: 3px;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(234, 88, 35, 0.35);
+    transition: background-color 0.25s ease, transform 0.2s ease;
+  }
+  .hero-btn svg { width: 20px; height: 20px; }
+  .hero-btn:hover {
+    background-color: var(--color-accent-hover);
+    transform: translateY(-2px);
+  }
+
+  .hero-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+  }
+  .hero-arrow:hover { background: var(--color-accent); border-color: var(--color-accent); }
+  .hero-arrow-prev { left: 2rem; }
+  .hero-arrow-next { right: 2rem; }
+
+  .hero-dots {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    gap: 0.6rem;
+  }
+  .hero-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s ease;
+  }
+  .hero-dot.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  /* Phones: portrait images (941 x 1672). Match that ratio so the full mobile
+     banner shows, and anchor the editable text to the empty top area. */
+  @media (max-width: 768px) {
+    .hero-carousel { aspect-ratio: 941 / 1672; }
+    .hero-slide { align-items: flex-start; }
+    .hero-bg { background-position: center top; }
+    .hero-overlay {
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.1) 40%, rgba(0, 0, 0, 0) 65%);
+    }
+    .hero-content {
+      max-width: 100%;
+      text-align: center;
+      padding-top: 3rem;
+    }
+    .hero-accent { margin-left: auto; margin-right: auto; }
+    .hero-subtitle { margin-left: auto; margin-right: auto; }
+    .hero-arrow { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-content { padding-top: 2rem; }
+    .hero-content h1 { font-size: 1.6rem; letter-spacing: 0.3px; }
+    .hero-subtitle { font-size: 0.98rem; margin-bottom: 1.5rem; }
+    .hero-btn { padding: 0.85rem 1.6rem; font-size: 0.95rem; }
+    .hero-dots { bottom: 1.25rem; }
+  }
+</style>

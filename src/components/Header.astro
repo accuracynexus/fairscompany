@@ -1,0 +1,326 @@
+---
+import { Image } from 'astro:assets';
+import logoPositivo from '../img/logo/logo-positivo.png';
+
+const pathname = Astro.url.pathname;
+const links = [
+  { name: 'Inicio', url: '/', icon: 'home' },
+  { name: 'Nosotros', url: '/nosotros', icon: 'office' },
+  { name: 'Productos', url: '/productos', icon: 'tshirt' },
+  { name: 'Nuestros Clientes', url: '/clientes', icon: 'users' },
+  { name: 'Contacto', url: '/contacto', icon: 'envelope' },
+];
+---
+
+<header class="header" id="site-header">
+  <div class="container header-content">
+    <a href="/" class="logo" aria-label="Fair's Company — Inicio">
+      <Image src={logoPositivo} width={2360} height={595} alt="Fair's Company" class="logo-img" loading="eager" />
+    </a>
+
+    <nav class="desktop-nav">
+      <ul>
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.url}
+              class={pathname === link.url || (pathname.startsWith(link.url) && link.url !== '/') ? 'active' : ''}
+            >
+              <re-icon icon={link.icon} size="16" weight="Outline" aria-hidden="true"></re-icon>
+              <span>{link.name}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <button class="mobile-menu-btn" aria-label="Abrir menú" aria-expanded="false" id="mobile-menu-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+
+<nav class="mobile-nav" id="mobile-nav" aria-hidden="true">
+  <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Cerrar menú">
+    <span></span>
+    <span></span>
+  </button>
+  <ul>
+    {links.map((link) => (
+      <li>
+        <a
+          href={link.url}
+          class={pathname === link.url || (pathname.startsWith(link.url) && link.url !== '/') ? 'active' : ''}
+        >
+          <re-icon icon={link.icon} size="20" weight="Outline" aria-hidden="true"></re-icon>
+          <span>{link.name}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<script>
+  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+  const mobileNavClose = document.getElementById('mobile-nav-close');
+  const mobileNav = document.getElementById('mobile-nav');
+  const backdrop = document.getElementById('mobile-nav-backdrop');
+
+  function openMenu() {
+    mobileNav?.classList.add('active');
+    backdrop?.classList.add('active');
+    mobileMenuToggle?.classList.add('open');
+    mobileMenuToggle?.setAttribute('aria-expanded', 'true');
+    mobileNav?.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    mobileNav?.classList.remove('active');
+    backdrop?.classList.remove('active');
+    mobileMenuToggle?.classList.remove('open');
+    mobileMenuToggle?.setAttribute('aria-expanded', 'false');
+    mobileNav?.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  mobileMenuToggle?.addEventListener('click', () => {
+    mobileNav?.classList.contains('active') ? closeMenu() : openMenu();
+  });
+
+  mobileNavClose?.addEventListener('click', closeMenu);
+  backdrop?.addEventListener('click', closeMenu);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileNav?.classList.contains('active')) closeMenu();
+  });
+
+  mobileNav?.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+
+  // Hide the header when scrolling down, reveal it when scrolling up.
+  let lastScrollY = window.scrollY;
+  const header = document.getElementById('site-header');
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      const currentY = window.scrollY;
+      if (currentY > lastScrollY && currentY > 120) {
+        header?.classList.add('header-hidden');
+      } else {
+        header?.classList.remove('header-hidden');
+      }
+      header?.classList.toggle('header-scrolled', currentY > 20);
+      lastScrollY = currentY;
+    },
+    { passive: true }
+  );
+</script>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    background: var(--color-header);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 1000;
+    transition: transform 0.35s ease, box-shadow 0.3s ease;
+  }
+
+  .header.header-scrolled {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  .header.header-hidden {
+    transform: translateY(-100%);
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-img {
+    height: 38px;
+    width: auto;
+    display: block;
+  }
+
+  .desktop-nav ul {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .desktop-nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    position: relative;
+    color: #a0a0a0;
+    transition: color 0.3s ease;
+  }
+
+  .desktop-nav a re-icon {
+    color: inherit;
+    flex-shrink: 0;
+  }
+
+  .desktop-nav a:hover,
+  .desktop-nav a.active {
+    color: var(--color-accent);
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 1001;
+  }
+
+  .mobile-menu-btn span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background-color: var(--color-text-light);
+    transition: 0.3s;
+  }
+
+  .mobile-menu-btn.open span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .mobile-menu-btn.open span:nth-child(2) {
+    opacity: 0;
+  }
+  .mobile-menu-btn.open span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* Right-side sliding drawer */
+  .mobile-nav-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+  }
+
+  .mobile-nav-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mobile-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: min(320px, 82vw);
+    background: var(--color-header);
+    box-shadow: -12px 0 40px rgba(0, 0, 0, 0.4);
+    z-index: 1002;
+    padding: 6.5rem 2rem 2rem;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    overflow-y: auto;
+  }
+
+  .mobile-nav.active {
+    transform: translateX(0);
+  }
+
+  .mobile-nav-close {
+    position: absolute;
+    top: 1.75rem;
+    right: 1.75rem;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.06);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .mobile-nav-close span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 2px;
+    background: var(--color-text-light);
+  }
+
+  .mobile-nav-close span:nth-child(1) {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  .mobile-nav-close span:nth-child(2) {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  .mobile-nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mobile-nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.9rem 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-text-light);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .mobile-nav a re-icon {
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  .mobile-nav a.active {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 900px) {
+    .logo-img {
+      height: 32px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .desktop-nav {
+      display: none;
+    }
+    .mobile-menu-btn {
+      display: flex;
+    }
+  }
+</style>

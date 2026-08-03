@@ -1,0 +1,47 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+
+export const prerender = false;
+---
+
+<AdminLayout title="Panel de administración">
+  <h1>Panel de administración</h1>
+  <p class="lead">Gestiona el contenido editable del sitio de Fair's Company.</p>
+
+  <div class="admin-cards">
+    <a href="/admin/banners" class="admin-card">
+      <h2>Banners</h2>
+      <p>Edita el slide principal del hero y los banners para celular.</p>
+    </a>
+    <a href="/admin/productos" class="admin-card">
+      <h2>Productos</h2>
+      <p>Agrega, edita o quita los productos que se muestran en el sitio.</p>
+    </a>
+  </div>
+</AdminLayout>
+
+<style>
+  .lead { color: #666; margin-bottom: 2.5rem; }
+  .admin-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+  .admin-card {
+    display: block;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .admin-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  .admin-card h2 {
+    margin-bottom: 0.5rem;
+    color: var(--color-accent);
+  }
+  .admin-card p { color: #666; font-size: 0.95rem; }
+</style>

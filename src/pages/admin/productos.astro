@@ -1,0 +1,283 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { getAllProducts, resolveProductImage, getCategoryImages } from '../../db/client';
+import { categories } from '../../lib/categories';
+
+export const prerender = false;
+
+const error = Astro.url.searchParams.get('error');
+const products = getAllProducts();
+
+// Category images: admin override → default seeded photo → icon placeholder.
+const categoryOverrides = getCategoryImages();
+const categoryList = categories.map((cat) => ({
+  key: cat.key,
+  tag: cat.tag,
+  name: cat.name,
+  icon: cat.icon,
+  overridden: !!categoryOverrides[cat.key],
+  image: categoryOverrides[cat.key] ?? resolveProductImage(cat.imageSeed),
+}));
+---
+
+<AdminLayout title="Productos">
+  <h1>Productos</h1>
+  <p class="lead">Agrega, edita o quita los productos que se muestran en la página principal y en /productos.</p>
+
+  {error && <p class="admin-error">{decodeURIComponent(error)}</p>}
+
+  <section class="admin-panel">
+    <h2>Agregar producto</h2>
+    <form method="POST" action="/api/admin/products" enctype="multipart/form-data">
+      <input type="hidden" name="action" value="add" />
+      <div class="admin-field">
+        <label for="new-name">Nombre</label>
+        <input id="new-name" type="text" name="name" required />
+      </div>
+      <div class="admin-field">
+        <label for="new-category">Categoría</label>
+        <input id="new-category" type="text" name="category" placeholder="Línea Institucional" />
+      </div>
+      <div class="admin-field">
+        <label for="new-description">Descripción corta</label>
+        <textarea id="new-description" name="description" rows="2"></textarea>
+      </div>
+      <div class="admin-field">
+        <label for="new-image">Imagen</label>
+        <input id="new-image" type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif" data-preview-target="new-image-preview" />
+        <img id="new-image-preview" class="file-preview" alt="Vista previa" hidden />
+      </div>
+      <button type="submit" class="btn-small">Agregar producto</button>
+    </form>
+  </section>
+
+  <section class="admin-panel">
+    <h2>Imágenes de las categorías</h2>
+    <p class="section-note">
+      Cada categoría de la página <strong>/productos</strong> muestra una imagen. Aquí puedes ver la que se
+      usa actualmente y reemplazarla por una propia. Si no subes ninguna, se usa la imagen por defecto.
+    </p>
+
+    <div class="category-grid">
+      {categoryList.map((cat) => (
+        <div class="category-item">
+          <div class="category-media">
+            {cat.image ? (
+              <img src={cat.image} alt={cat.name} />
+            ) : (
+              <span class="category-media-ph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={cat.icon} />
+              </span>
+            )}
+          </div>
+
+          <div class="category-body">
+            <span class="category-tag">{cat.tag}</span>
+            <span class={`category-status ${cat.overridden ? 'custom' : 'default'}`}>
+              {cat.overridden ? 'Imagen personalizada' : 'Imagen por defecto'}
+            </span>
+
+            <form method="POST" action="/api/admin/products" enctype="multipart/form-data" class="category-form">
+              <input type="hidden" name="action" value="save_category_image" />
+              <input type="hidden" name="key" value={cat.key} />
+              <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif" required data-preview-target={`cat-preview-${cat.key}`} />
+              <img id={`cat-preview-${cat.key}`} class="file-preview" alt="Vista previa" hidden />
+              <button type="submit" class="btn-small">Guardar imagen</button>
+            </form>
+
+            {cat.overridden && (
+              <form method="POST" action="/api/admin/products" class="category-reset">
+                <input type="hidden" name="action" value="save_category_image" />
+                <input type="hidden" name="key" value={cat.key} />
+                <input type="hidden" name="reset" value="1" />
+                <button type="submit" class="btn-small outline">Quitar y usar la de por defecto</button>
+              </form>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="admin-panel">
+    <h2>Productos actuales</h2>
+    <div class="product-list">
+      {products.length === 0 && <p class="empty">No hay productos todavía.</p>}
+      {products.map((product) => (
+        <details class="product-item">
+          <summary>
+            <img src={resolveProductImage(product.image_url) ?? '/favicon.svg'} alt={product.name} />
+            <span class="product-name">{product.name}</span>
+            <span class={product.active ? 'status active' : 'status inactive'}>
+              {product.active ? 'Activo' : 'Inactivo'}
+            </span>
+          </summary>
+
+          <form method="POST" action="/api/admin/products" enctype="multipart/form-data" class="edit-form">
+            <input type="hidden" name="action" value="update" />
+            <input type="hidden" name="id" value={product.id} />
+            <div class="admin-field">
+              <label>Nombre</label>
+              <input type="text" name="name" value={product.name} required />
+            </div>
+            <div class="admin-field">
+              <label>Categoría</label>
+              <input type="text" name="category" value={product.category ?? ''} />
+            </div>
+            <div class="admin-field">
+              <label>Descripción corta</label>
+              <textarea name="description" rows="2">{product.description ?? ''}</textarea>
+            </div>
+            <div class="admin-field">
+              <label for={`edit-image-${product.id}`}>Reemplazar imagen (opcional)</label>
+              <input id={`edit-image-${product.id}`} type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif" data-preview-target={`edit-image-preview-${product.id}`} />
+              <img id={`edit-image-preview-${product.id}`} class="file-preview" alt="Vista previa" hidden />
+            </div>
+            <div class="admin-field admin-field-inline">
+              <input type="checkbox" name="active" id={`active-${product.id}`} checked={!!product.active} />
+              <label for={`active-${product.id}`} style="margin-bottom:0;">Visible en el sitio</label>
+            </div>
+            <div class="edit-actions">
+              <button type="submit" class="btn-small">Guardar cambios</button>
+            </div>
+          </form>
+
+          <form method="POST" action="/api/admin/products" class="delete-form">
+            <input type="hidden" name="action" value="delete" />
+            <input type="hidden" name="id" value={product.id} />
+            <button type="submit" class="btn-small danger">Eliminar producto</button>
+          </form>
+        </details>
+      ))}
+    </div>
+  </section>
+</AdminLayout>
+
+<script>
+  document.querySelectorAll<HTMLInputElement>('input[type="file"][data-preview-target]').forEach((input) => {
+    const targetId = input.dataset.previewTarget;
+    if (!targetId) return;
+    const preview = document.getElementById(targetId) as HTMLImageElement | null;
+    if (!preview) return;
+
+    input.addEventListener('change', () => {
+      const file = input.files?.[0];
+      if (!file) {
+        preview.hidden = true;
+        preview.removeAttribute('src');
+        return;
+      }
+      preview.src = URL.createObjectURL(file);
+      preview.hidden = false;
+    });
+  });
+</script>
+
+<style>
+  .lead { color: #666; margin-bottom: 2rem; max-width: 700px; }
+  .empty { color: #999; font-style: italic; }
+  .product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .product-item {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 0.9rem 1.2rem;
+  }
+  .product-item summary {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .product-item summary::-webkit-details-marker { display: none; }
+  .product-item summary img {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #f4f4f5;
+  }
+  .product-name { flex: 1; font-weight: 600; }
+  .status {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+  .status.active { color: #1e8e3e; }
+  .status.inactive { color: #999; }
+  .edit-form {
+    margin-top: 1.2rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid #eee;
+  }
+  .edit-actions { margin-top: 0.5rem; }
+  .delete-form { margin-top: 0.8rem; }
+  .file-preview[hidden] {
+    display: none;
+  }
+  .file-preview {
+    display: block;
+    margin-top: 0.7rem;
+    max-width: 200px;
+    max-height: 140px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 1px solid #eee;
+  }
+
+  .section-note { color: #666; margin-bottom: 1.5rem; max-width: 700px; line-height: 1.6; font-size: 0.92rem; }
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .category-item {
+    display: flex;
+    gap: 1rem;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 0.9rem;
+  }
+  .category-media {
+    flex-shrink: 0;
+    width: 84px;
+    height: 84px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f6f2ef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .category-media img { width: 100%; height: 100%; object-fit: cover; }
+  .category-media-ph { width: 34px; height: 34px; color: #ea5823; opacity: 0.8; }
+  .category-media-ph svg { width: 100%; height: 100%; }
+  .category-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+  .category-tag { font-weight: 700; font-size: 0.9rem; color: #333; }
+  .category-status {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    width: fit-content;
+    padding: 0.18rem 0.5rem;
+    border-radius: 6px;
+  }
+  .category-status.custom { background: #e6f4ea; color: #1e8e3e; }
+  .category-status.default { background: #eef0f2; color: #7a8290; }
+  .category-form { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.3rem; }
+  .category-form input[type='file'] { font-size: 0.8rem; }
+  .category-reset { margin-top: 0.2rem; }
+  .btn-small.outline {
+    background: transparent;
+    border: 1px solid #d0d0d0;
+    color: #666;
+  }
+</style>

@@ -1,0 +1,193 @@
+---
+import { getImage } from 'astro:assets';
+import '../styles/global.css';
+import brandMark from '../img/logo/logo-splash.png';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+const favicon = await getImage({ src: brandMark, width: 256, format: 'png' });
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/png" href={favicon.src} />
+    <title>{title} | Fair's Company Admin</title>
+  </head>
+  <body class="admin-body">
+    <header class="admin-topbar">
+      <a href="/admin" class="admin-brand">FAIR'S COMPANY <span>Admin</span></a>
+      <nav>
+        <a href="/admin/banners">Banners</a>
+        <a href="/admin/productos">Productos</a>
+        <a href="/" target="_blank" rel="noopener noreferrer">Ver sitio ↗</a>
+        <form method="POST" action="/api/admin/logout" class="logout-form">
+          <button type="submit">Cerrar sesión</button>
+        </form>
+      </nav>
+    </header>
+    <main class="admin-main">
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  .admin-body {
+    background: #f4f4f5;
+    min-height: 100vh;
+  }
+  .admin-topbar {
+    background: var(--color-header);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .admin-brand {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #fff;
+    font-size: 1.1rem;
+  }
+  .admin-brand span { color: var(--color-accent); }
+  .admin-topbar nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.85rem;
+  }
+  .admin-topbar nav a {
+    color: #ccc;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .admin-topbar nav a:hover { color: var(--color-accent); }
+  .logout-form button {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ccc;
+    padding: 0.4rem 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+  }
+  .logout-form button:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .admin-main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+  .admin-main h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+  .admin-panel {
+    background: #fff;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    margin-bottom: 2rem;
+  }
+  .admin-panel h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+  .admin-field { margin-bottom: 1.2rem; }
+  .admin-field label {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #666;
+    margin-bottom: 0.4rem;
+  }
+  .admin-field input[type='text'],
+  .admin-field input[type='url'],
+  .admin-field input[type='number'],
+  .admin-field textarea {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+  }
+  .admin-field input:focus,
+  .admin-field textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+  .admin-field-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .admin-error {
+    background: #fdecea;
+    color: #b3261e;
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+  .btn-small {
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    background: var(--color-accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .btn-small:hover { background: var(--color-accent-hover); }
+  .btn-small.danger { background: #b3261e; }
+  .btn-small.danger:hover { background: #8f1e17; }
+  .btn-small.outline {
+    background: none;
+    color: #666;
+    border: 1px solid #ccc;
+  }
+
+  @media (max-width: 640px) {
+    .admin-topbar {
+      padding: 1rem 1.25rem;
+      justify-content: flex-start;
+    }
+    .admin-topbar nav {
+      width: 100%;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .admin-main {
+      padding: 2rem 1.25rem;
+    }
+    .admin-panel {
+      padding: 1.25rem;
+    }
+    .admin-main h1 {
+      font-size: 1.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,232 @@
+---
+import { Image } from 'astro:assets';
+import logoPositivo from '../img/logo/logo-positivo.png';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-column scroll-animate">
+      <a href="/" class="footer-brand" aria-label="Fair's Company — Inicio">
+        <Image src={logoPositivo} width={2360} height={595} alt="Fair's Company" class="footer-logo-img" />
+      </a>
+      <ul>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/nosotros">Nosotros</a></li>
+        <li><a href="/productos">Productos</a></li>
+        <li><a href="/contacto">Contacto</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-column scroll-animate animate-delay-1">
+      <h4>SECTORES QUE ATENDEMOS</h4>
+      <ul>
+        <li><a href="/productos?sector=empresas">Empresas</a></li>
+        <li><a href="/productos?sector=colegios">Colegios</a></li>
+        <li><a href="/productos?sector=salud">Sector Salud</a></li>
+        <li><a href="/productos?sector=instituciones">Instituciones</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-column scroll-animate animate-delay-2">
+      <h4>SÍGUENOS</h4>
+      <ul>
+        <li><a href="https://www.facebook.com/share/1Gpv3S2KNE/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+        <li><a href="https://www.tiktok.com/@fairstyle6?_r=1&_t=ZS-98OpHvaFnvR" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+        <li><a href="https://www.instagram.com/fairs.company?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+        <li><a href="https://wa.me/51934336181" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column scroll-animate animate-delay-3">
+      <h4>CONTÁCTANOS</h4>
+      <p class="contact-info"><strong>Sede Lima:</strong> Los Aperos 150, La Molina, Ate, Lima, Perú</p>
+      <p class="contact-info"><strong>Sucursal Huancayo:</strong> Jr. Moquegua 1061, Huancayo, Junín, Perú</p>
+      <p class="contact-info"><a href="tel:+51934336181">+51 934 336 181</a></p>
+      <p class="contact-info"><a href="mailto:ventas@fairscompany.com">ventas@fairscompany.com</a></p>
+      <p class="contact-info">Lun - Vie | 9:30 a.m. - 6:00 p.m.</p>
+      <p class="contact-info">Sáb | 9:30 a.m. - 1:00 p.m.</p>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div class="container footer-bottom-flex">
+      <p class="copyright">&copy; {currentYear} FAIR'S COMPANY. Todos los derechos reservados.</p>
+      <a href="http://accuracynexus.wuaze.com" target="_blank" rel="noopener noreferrer" class="powered-by-btn">
+        <span>Powered by</span>
+        <strong>Accuracy Nexus</strong>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    padding-top: 5rem;
+    font-family: var(--font-body);
+  }
+  
+  .footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 3rem;
+    margin-bottom: 4rem;
+  }
+  
+  .footer-column h4 {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--color-accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .footer-logo-img {
+    height: 44px;
+    width: auto;
+    display: block;
+  }
+
+
+  .footer-column ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .footer-column a {
+    color: #a0a0a0;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+  }
+  
+  .footer-column a:hover {
+    color: #ffffff;
+  }
+  
+  .contact-info {
+    color: #a0a0a0;
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+  }
+
+  .contact-info a {
+    color: #a0a0a0;
+  }
+
+  .contact-info a:hover {
+    color: #ffffff;
+  }
+  
+  .footer-bottom {
+    background-color: var(--color-accent);
+    padding: 1.5rem 0;
+    color: #ffffff;
+  }
+
+  .footer-bottom-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .copyright {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  /* Eye-catching button */
+  .powered-by-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #1f1f1f;
+    color: #ffffff;
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .powered-by-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.35),
+      transparent
+    );
+    animation: powered-by-shine 5s ease-in-out infinite;
+  }
+
+  @keyframes powered-by-shine {
+    0% { left: -100%; }
+    20% { left: 100%; }
+    100% { left: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .powered-by-btn::before {
+      animation: none;
+      display: none;
+    }
+  }
+
+  .powered-by-btn:hover {
+    transform: scale(1.05) translateY(-2px);
+    border-color: #ffffff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.2);
+  }
+
+  .powered-by-btn span {
+    font-weight: 400;
+    opacity: 0.8;
+  }
+
+  .powered-by-btn strong {
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 768px) {
+    .footer {
+      padding-top: 3.5rem;
+    }
+    .footer-content {
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .footer-bottom-flex {
+      flex-direction: column;
+      text-align: center;
+      justify-content: center;
+    }
+  }
+</style>

@@ -1,0 +1,984 @@
+---
+export const prerender = true;
+
+import Layout from '../layouts/Layout.astro';
+import contactoImg from '../img/secciones/contacto.jpg';
+
+const faqs = [
+  {
+    q: '¿Cuál es el pedido mínimo?',
+    a: 'El pedido mínimo es de 24 unidades. Puede variar según el tipo de prenda y el nivel de personalización requerido.',
+  },
+  {
+    q: '¿Realizan diseños personalizados?',
+    a: 'Sí. Todos nuestros productos pueden adaptarse a la identidad gráfica y necesidades del cliente.',
+  },
+  {
+    q: '¿Cuánto demora la producción?',
+    a: 'El tiempo de entrega depende del tipo de prenda y del volumen del pedido. Lo confirmamos al momento de la cotización.',
+  },
+  {
+    q: '¿Realizan envíos a provincias?',
+    a: 'Sí. Atendemos pedidos y realizamos envíos a nivel nacional.',
+  },
+  {
+    q: '¿Qué materiales utilizan?',
+    a: 'Trabajamos con materiales de alta calidad seleccionados según el tipo de prenda y su uso.',
+  },
+  {
+    q: '¿Cómo puedo solicitar una cotización?',
+    a: 'Puede contactarnos mediante WhatsApp, el formulario web o correo electrónico.',
+  },
+];
+
+const coverageCities = [
+  'Lima', 'Huancayo', 'Arequipa', 'Cusco', 'Trujillo', 'Piura', 'Chiclayo',
+  'Huánuco', 'Ayacucho', 'Junín', 'Ica', 'Tacna', 'Puno',
+];
+---
+
+<Layout
+  title="Contacto"
+  description="Contáctanos para cotizar uniformes y prendas personalizadas. WhatsApp, formulario web o correo. Fábrica en Ate, Lima, con envíos a todo el Perú. Pedido mínimo 24 unidades."
+>
+  <!-- Section Title Header -->
+  <div class="page-header scroll-animate">
+    <div class="container">
+      <h1>CONTACTANOS</h1>
+      <p>Comunícate con nosotros para solicitar tu cotización o resolver tus dudas.</p>
+    </div>
+  </div>
+
+  <section class="section container">
+    <div class="contact-layout-grid">
+      
+      <!-- Left Column -->
+      <div class="contact-left-col scroll-animate">
+        <div class="need-garments-box">
+          <h2><span class="orange-arrow">&rarr;</span> ¿Necesitas prendas personalizadas?</h2>
+          <p>
+            En FAIR'S COMPANY estamos listos para asesorarte en la confección de prendas personalizadas para empresas, colegios, instituciones y el sector salud. Completa el formulario o comunícate con nosotros por cualquiera de nuestros canales. Será un gusto atenderte.
+          </p>
+        </div>
+        
+        <div class="meeting-image-wrapper">
+          <img src={contactoImg.src} alt="Reunión en Taller de Confección Fair's Company" />
+        </div>
+      </div>
+      
+      <!-- Right Column -->
+      <div class="contact-right-col">
+        <!-- Formulario de Cotización -->
+        <div class="quotation-form-box scroll-animate animate-delay-1">
+          <h3>Formulario de cotización</h3>
+
+          <form id="quotation-form" class="quotation-form">
+            <div class="form-row-2">
+              <div class="form-group-wix">
+                <label for="q-nombre">Nombre *</label>
+                <div class="input-wrap">
+                  <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <input type="text" id="q-nombre" name="nombre" placeholder="Tu nombre completo" required />
+                </div>
+              </div>
+              <div class="form-group-wix">
+                <label for="q-empresa">Empresa</label>
+                <div class="input-wrap">
+                  <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/></svg>
+                  <input type="text" id="q-empresa" name="empresa" placeholder="Nombre de tu empresa o institución" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group-wix">
+                <label for="q-cargo">Cargo</label>
+                <div class="input-wrap">
+                  <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                  <input type="text" id="q-cargo" name="cargo" placeholder="Ej. Jefe de Logística" />
+                </div>
+              </div>
+              <div class="form-group-wix phone-input-wix">
+                <label for="q-celular">Celular *</label>
+                <div class="input-wrap">
+                  <img class="field-flag" src="/flags/pe.svg" alt="Perú" width="22" height="15" />
+                  <span class="phone-prefix">+51</span>
+                  <input type="tel" id="q-celular" name="celular" placeholder="999 999 999" required />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group-wix">
+                <label for="q-correo">Correo Electrónico</label>
+                <div class="input-wrap">
+                  <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                  <input type="email" id="q-correo" name="correo" placeholder="tucorreo@empresa.com" />
+                </div>
+              </div>
+              <div class="form-group-wix">
+                <label for="q-ciudad">Ciudad</label>
+                <div class="input-wrap">
+                  <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <input type="text" id="q-ciudad" name="ciudad" placeholder="Ej. Lima" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group-wix">
+                <label for="q-producto">Producto de Interés</label>
+                <div class="input-wrap">
+                  <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+                  <select id="q-producto" name="producto">
+                  <option value="">Selecciona una opción</option>
+                  <option>Uniformes escolares</option>
+                  <option>Prendas de promoción</option>
+                  <option>Uniformes corporativos</option>
+                  <option>Uniformes médicos</option>
+                  <option>Ropa industrial / EPP</option>
+                  <option>Indumentaria para hotelería</option>
+                  <option>Indumentaria para gastronomía</option>
+                  <option>Merchandising corporativo</option>
+                  <option>Otro</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group-wix">
+                <label for="q-cantidad">Cantidad Aproximada</label>
+                <div class="input-wrap">
+                  <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" x2="20" y1="9" y2="9"/><line x1="4" x2="20" y1="15" y2="15"/><line x1="10" x2="8" y1="3" y2="21"/><line x1="16" x2="14" y1="3" y2="21"/></svg>
+                  <input type="number" id="q-cantidad" name="cantidad" min="1" placeholder="Ej. 50 unidades" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group-wix">
+              <label for="q-personalizacion">Personalización</label>
+              <div class="input-wrap">
+                <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5A2 2 0 0 0 15.5 9.94l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/></svg>
+                <select id="q-personalizacion" name="personalizacion">
+                <option value="">Selecciona una opción</option>
+                <option>Bordado</option>
+                <option>Estampado</option>
+                <option>Sublimado</option>
+                <option>Serigrafía</option>
+                <option>DTF / Vinil textil</option>
+                <option>Varias técnicas</option>
+                <option>Por definir</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group-wix">
+              <label for="q-mensaje">Mensaje</label>
+              <div class="input-wrap input-wrap--textarea">
+                <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <textarea id="q-mensaje" name="mensaje" rows="4" placeholder="Cuéntanos los detalles de tu pedido: tallas, colores, fecha estimada…"></textarea>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-submit-wix">Solicitar Cotización</button>
+            <p id="q-note" class="form-note">Al enviar, abriremos WhatsApp con tu solicitud lista para mandar.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información de Contacto Directo: fila completa a todo el ancho -->
+    <div class="contact-details-box scroll-animate animate-delay-2">
+      <div class="details-main">
+        <h4>INFORMACIÓN DE CONTACTO</h4>
+        <ul class="contact-info-list">
+            <li>
+              <span class="ci-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </span>
+              <span class="ci-text">
+                <span class="ci-label">Sede Lima</span>
+                <span class="ci-value">Los Aperos 150, La Molina, Ate, Lima, Perú</span>
+              </span>
+            </li>
+            <li>
+              <span class="ci-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </span>
+              <span class="ci-text">
+                <span class="ci-label">Sucursal Huancayo</span>
+                <span class="ci-value">Jr. Moquegua 1061, Huancayo, Junín, Perú</span>
+              </span>
+            </li>
+            <li>
+              <span class="ci-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+              </span>
+              <span class="ci-text">
+                <span class="ci-label">Teléfono</span>
+                <a class="ci-value" href="tel:+51934336181">+51 934 336 181</a>
+              </span>
+            </li>
+            <li>
+              <span class="ci-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              </span>
+              <span class="ci-text">
+                <span class="ci-label">Correo</span>
+                <a class="ci-value" href="mailto:ventas@fairscompany.com">ventas@fairscompany.com</a>
+              </span>
+            </li>
+            <li>
+              <span class="ci-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </span>
+              <span class="ci-text">
+                <span class="ci-label">Horario</span>
+                <span class="ci-value">Lunes a viernes · 9:30 a.m. &ndash; 6:00 p.m.<br />Sábados · 9:30 a.m. &ndash; 1:00 p.m.</span>
+              </span>
+            </li>
+        </ul>
+      </div>
+
+      <div class="details-aside">
+        <h4 class="title-grey">ATENCIÓN INMEDIATA</h4>
+          <p class="immediate-desc">
+            Escríbenos directamente por WhatsApp y uno de nuestros asesores te atenderá.
+          </p>
+          
+          <a href="https://wa.me/51934336181?text=Hola!%20Quiero%20solicitar%20una%20cotizaci%C3%B3n%20de%20prendas." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-wix">
+            CONTACTAR POR WHATSAPP
+          </a>
+
+          <h4 class="title-grey social-title">SÍGUENOS</h4>
+          <div class="social-row">
+            <a href="https://www.facebook.com/share/1Gpv3S2KNE/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/fairs.company?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@fairstyle6?_r=1&_t=ZS-98OpHvaFnvR" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="TikTok">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.27 0 .53.04.77.12v-3.16a5.73 5.73 0 0 0-.77-.05 5.75 5.75 0 1 0 5.75 5.75V9.01a7.35 7.35 0 0 0 4.31 1.38V7.3a4.28 4.28 0 0 1-3.32-1.48Z"/></svg>
+            </a>
+            <a href="https://wa.me/51934336181" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="WhatsApp Business">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-23.1-115-65-157zM223.9 414.7c-33.1 0-65.5-8.9-94-25.7l-6.7-4-69.8 18.3L72 334.1l-4.4-7.1c-18.4-29.6-28.1-64-28.1-99.1 0-103.5 84.3-187.8 187.9-187.8 50.2 0 97.4 19.5 132.9 55.1 35.5 35.6 55.1 82.7 55.1 133 0 103.6-84.3 187.8-187.9 187.8zM326.6 280c-5.6-2.8-33.3-16.4-38.5-18.3-5.2-1.9-9-2.8-12.8 2.8-3.7 5.6-14.6 18.3-17.9 22.1-3.3 3.8-6.6 4.2-12.2 1.4-5.6-2.8-23.7-8.8-45.2-28.1-16.7-15-28-33.5-31.3-39.1-3.3-5.6-.3-8.6 2.5-11.4 2.5-2.5 5.6-6.6 8.5-9.9 2.8-3.3 3.8-5.6 5.6-9.4 1.9-3.7.9-7.1-.5-9.9-1.4-2.8-12.8-30.9-17.5-42.3-4.6-11.2-9.3-9.7-12.8-9.9-3.3-.2-7.1-.2-10.8-.2Z"/></svg>
+            </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Google Maps Embed Section -->
+  <section class="map-section scroll-animate">
+    <div class="container" style="max-width: 900px;">
+      <div class="text-center" style="margin-bottom: 2.5rem;">
+        <h3 class="map-section-title">Nuestras Ubicaciones</h3>
+        <p style="color: #666;">Sede Lima: fábrica en Ate / La Molina &middot; Sucursal Huancayo: Jr. Moquegua 1061.</p>
+      </div>
+      <div class="map-card-frame">
+        <div class="map-wrapper-wix">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.691763785465!2d-76.9405626248386!3d-12.064731188173516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c6ecfa20a6c7%3A0x6b30f80e7ad4492!2sLos%20Aperos%20150%2C%20Ate%2015012!5e0!3m2!1ses!2spe!4v1700000000000!5m2!1ses!2spe" 
+            width="100%" 
+            height="400" 
+            style="border:0; display: block;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+      <div class="text-center map-directions-row" style="margin-top: 1.75rem;">
+        <a href="https://maps.app.goo.gl/DVsQPqGUTQWxDUMA7" target="_blank" rel="noopener noreferrer" class="map-directions-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          Cómo llegar (Lima)
+        </a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Jr.+Moquegua+1061+Huancayo" target="_blank" rel="noopener noreferrer" class="map-directions-btn map-directions-btn--alt">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          Cómo llegar (Huancayo)
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preguntas Frecuentes -->
+  <section class="section faq-section">
+    <div class="container" style="max-width: 820px;">
+      <div class="text-center">
+        <h2 class="faq-title scroll-animate">Preguntas frecuentes</h2>
+        <p class="faq-subtitle scroll-animate animate-delay-1">
+          Resolvemos las dudas más comunes sobre pedidos, producción y envíos.
+        </p>
+      </div>
+
+      <div class="faq-list">
+        {faqs.map((item, i) => (
+          <details class={`faq-item scroll-animate animate-delay-${(i % 3) + 1}`}>
+            <summary>
+              <span>{item.q}</span>
+              <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <p>{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Cobertura -->
+  <section class="section coverage-section">
+    <div class="container text-center">
+      <h2 class="coverage-title scroll-animate">Cobertura a nivel nacional</h2>
+      <p class="coverage-subtitle scroll-animate animate-delay-1">
+        Atendemos proyectos y realizamos envíos en todo el territorio peruano.
+      </p>
+      <div class="coverage-cities scroll-animate animate-delay-2">
+        {coverageCities.map((city) => <span class="city-chip">{city}</span>)}
+        <span class="city-chip city-chip--more">y demás regiones del Perú</span>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const form = document.getElementById('quotation-form');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const labels = {
+        nombre: 'Nombre',
+        empresa: 'Empresa',
+        cargo: 'Cargo',
+        celular: 'Celular',
+        correo: 'Correo',
+        ciudad: 'Ciudad',
+        producto: 'Producto de interés',
+        cantidad: 'Cantidad aproximada',
+        personalizacion: 'Personalización',
+        mensaje: 'Mensaje',
+      };
+      const lines = ['Hola! Quiero solicitar una cotización.', ''];
+      for (const [key, label] of Object.entries(labels)) {
+        const value = (data.get(key) || '').toString().trim();
+        if (value) lines.push(`${label}: ${value}`);
+      }
+      const url = `https://wa.me/51934336181?text=${encodeURIComponent(lines.join('\n'))}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    });
+  }
+</script>
+
+<style>
+  .text-center {
+    text-align: center;
+  }
+
+  .contact-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 3.5rem;
+    /* stretch (not start) so the form column matches the image column's
+       height instead of ending short of it */
+    align-items: stretch;
+    padding-bottom: 4rem;
+  }
+
+  /* Let the form box fill the column, so its bottom lines up with the image */
+  .contact-right-col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Left Column styles */
+  .need-garments-box {
+    border: 2px solid var(--color-accent);
+    padding: 2.5rem;
+    background-color: #ffffff;
+    margin-bottom: 2.5rem;
+    border-radius: 2px;
+  }
+
+  .need-garments-box h2 {
+    font-family: var(--font-heading); /* Oswald */
+    color: var(--color-accent); /* Orange #ea5823 */
+    font-size: 2.1rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    line-height: 1.25;
+    text-transform: none;
+  }
+
+  .need-garments-box .orange-arrow {
+    display: inline-block;
+    margin-right: 5px;
+    font-weight: 400;
+  }
+
+  .need-garments-box p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #333333;
+    margin: 0;
+  }
+
+  .meeting-image-wrapper {
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .meeting-image-wrapper img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* Right Column styles */
+  .quotation-form-box {
+    background: #ffffff;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.04);
+    border-radius: 2px;
+    /* fills the column height; the leftover space reads as extra bottom
+       padding under the form */
+    flex: 1;
+  }
+
+  .quotation-form-box h3 {
+    font-family: var(--font-heading);
+    font-size: 2.4rem;
+    font-weight: 300; /* Fine/thin look as in the screenshot */
+    color: var(--color-accent);
+    margin-top: 0;
+    margin-bottom: 2.5rem;
+    letter-spacing: 0.5px;
+  }
+
+  .quotation-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+  }
+
+  .form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .form-group-wix {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+  }
+
+  .form-group-wix label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-accent); /* Wix style labels are orange color */
+  }
+
+  .form-group-wix input {
+    padding: 0.8rem 1rem;
+    border: 1.5px solid var(--color-accent);
+    border-radius: 2px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    background-color: #fff9f6; /* Subtle orange tinted background */
+    color: #242424;
+    transition: all 0.3s ease;
+  }
+
+  .form-group-wix input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(234, 88, 35, 0.15);
+    background-color: #ffffff;
+  }
+
+  /* Select and textarea match the tinted input style */
+  .form-group-wix select,
+  .form-group-wix textarea {
+    padding: 0.8rem 1rem;
+    border: 1.5px solid var(--color-accent);
+    border-radius: 2px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    background-color: #fff9f6;
+    color: #242424;
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+  .form-group-wix textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  .form-group-wix select:focus,
+  .form-group-wix textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(234, 88, 35, 0.15);
+    background-color: #ffffff;
+  }
+
+  .form-note {
+    font-size: 0.85rem;
+    color: #777;
+    text-align: center;
+    margin: 0.2rem 0 0;
+  }
+
+  .input-helper {
+    font-size: 0.8rem;
+    color: var(--color-accent);
+    margin-top: 0.2rem;
+    font-weight: 600;
+  }
+
+  /* Field icons sit inside the control; inputs get left padding to clear them */
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .field-icon {
+    position: absolute;
+    left: 0.85rem;
+    width: 17px;
+    height: 17px;
+    color: var(--color-accent);
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .input-wrap input,
+  .input-wrap select,
+  .input-wrap textarea {
+    width: 100%;
+    padding-left: 2.7rem;
+  }
+
+  /* Textarea: pin the icon to the first line instead of centring it */
+  .input-wrap--textarea { align-items: flex-start; }
+  .input-wrap--textarea .field-icon { top: 0.95rem; }
+
+  /* Peru flag + dial code on the phone field (an inline SVG, since the 🇵🇪
+     emoji does not render on Windows) */
+  .field-flag {
+    position: absolute;
+    left: 0.8rem;
+    width: 22px;
+    height: 15px;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .phone-prefix {
+    position: absolute;
+    left: 2.5rem;
+    font-size: 0.95rem;
+    color: #666;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .phone-input-wix .input-wrap input {
+    padding-left: 4.6rem;
+  }
+
+  .form-group-wix input::placeholder,
+  .form-group-wix textarea::placeholder {
+    color: #b3a9a3;
+    opacity: 1;
+  }
+
+  .btn-submit-wix {
+    background-color: var(--color-accent);
+    color: #ffffff;
+    border: none;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.15rem;
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background-color 0.3s ease;
+    text-transform: none;
+  }
+
+  .btn-submit-wix:hover {
+    background-color: var(--color-accent-hover);
+  }
+
+  /* Direct Contact Details Box — full-width row below the form grid.
+     Splits into the contact data (left) and the immediate-contact CTA plus
+     social links (right) so the row uses the whole width instead of stacking
+     into a tall, narrow column. */
+  .contact-details-box {
+    background-color: #f2f2f2; /* Light grey container */
+    padding: 3rem 2.5rem;
+    border-radius: 2px;
+    text-align: left;
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .details-aside {
+    border-left: 1px solid #e2e2e2;
+    padding-left: 2.5rem;
+  }
+
+  .contact-details-box h4 {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    margin-top: 0;
+    margin-bottom: 1.8rem;
+    letter-spacing: 0.5px;
+  }
+
+  .contact-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.6rem 2rem;
+  }
+
+  .contact-info-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .ci-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(234, 88, 35, 0.12);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ci-icon svg { width: 19px; height: 19px; }
+
+  .ci-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+    padding-top: 0.1rem;
+  }
+
+  .ci-label {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-accent);
+  }
+
+  .ci-value {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333333;
+    word-break: break-word;
+    transition: color 0.2s ease;
+  }
+  a.ci-value:hover { color: var(--color-accent); }
+
+  .contact-details-box .title-grey {
+    color: #777777;
+    margin-bottom: 1rem;
+  }
+
+  .immediate-desc {
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: #333333;
+    margin-bottom: 2rem;
+  }
+
+  .btn-whatsapp-wix {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    background-color: #3f7b53; /* Darker green matching screenshot button color */
+    color: #ffffff;
+    text-align: center;
+    padding: 1rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    border-radius: 30px; /* Highly rounded button */
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(63, 123, 83, 0.2);
+  }
+
+  .btn-whatsapp-wix:hover {
+    background-color: #326242;
+    transform: translateY(-2px);
+  }
+
+  /* Map Section with elegant border and bottom margin spacing */
+  .map-section {
+    padding: 6rem 0 8rem; /* Padding bottom increased to 8rem to prevent footer overlap */
+    background-color: #ffffff;
+    border-top: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .map-section-title {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+  }
+
+  .map-card-frame {
+    background: #ffffff;
+    padding: 12px;
+    border: 2px solid var(--color-accent); /* Elegant orange border */
+    border-radius: 4px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08); /* Deep soft shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .map-card-frame:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(234, 88, 35, 0.12); /* Subtle orange glow shadow */
+  }
+
+  .map-wrapper-wix {
+    width: 100%;
+    line-height: 0;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .map-directions-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--color-accent);
+    color: #ffffff;
+    padding: 0.8rem 1.8rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(234, 88, 35, 0.2);
+  }
+  .map-directions-btn svg { width: 18px; height: 18px; }
+  .map-directions-btn:hover {
+    background-color: var(--color-accent-hover);
+    transform: translateY(-2px);
+  }
+  .map-directions-row {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .map-directions-btn--alt {
+    background-color: #ffffff;
+    color: var(--color-accent);
+    border: 2px solid var(--color-accent);
+    box-shadow: none;
+  }
+  .map-directions-btn--alt:hover {
+    background-color: var(--color-accent);
+    color: #ffffff;
+  }
+
+  /* Social links inside the contact box */
+  .social-title { margin-top: 2.5rem; }
+  .social-row {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .social-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: var(--color-accent);
+    border: 1.5px solid var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  }
+  .social-btn svg { width: 20px; height: 20px; }
+  .social-btn:hover {
+    background: var(--color-accent);
+    color: #ffffff;
+    transform: translateY(-3px);
+  }
+
+  /* FAQ */
+  .faq-section { background-color: var(--color-tint); }
+  .faq-title {
+    font-family: var(--font-heading);
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--color-accent);
+    letter-spacing: 1px;
+    margin-bottom: 0.8rem;
+  }
+  .faq-subtitle {
+    color: #555;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .faq-item {
+    background: #ffffff;
+    border: 1px solid #ece7e3;
+    border-radius: 12px;
+    padding: 0 1.5rem;
+    box-shadow: 0 4px 16px rgba(30, 24, 20, 0.04);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .faq-item[open] {
+    border-color: rgba(234, 88, 35, 0.4);
+    box-shadow: 0 10px 26px rgba(30, 24, 20, 0.08);
+  }
+  .faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-heading);
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-chevron {
+    width: 20px;
+    height: 20px;
+    color: var(--color-accent);
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+  }
+  .faq-item[open] .faq-chevron { transform: rotate(180deg); }
+  .faq-item p {
+    margin: 0;
+    padding: 0 0 1.4rem;
+    color: #666;
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  /* Coverage */
+  .coverage-title {
+    font-family: var(--font-heading);
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--color-accent);
+    letter-spacing: 1px;
+    margin-bottom: 0.8rem;
+  }
+  .coverage-subtitle {
+    color: #555;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+  .coverage-cities {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .city-chip {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+    background: #ffffff;
+    border: 1px solid #ece7e3;
+    padding: 0.5rem 1.1rem;
+    border-radius: 30px;
+    box-shadow: 0 3px 10px rgba(30, 24, 20, 0.04);
+  }
+  .city-chip--more {
+    background: rgba(234, 88, 35, 0.1);
+    color: var(--color-accent);
+    border-color: rgba(234, 88, 35, 0.25);
+  }
+
+  @media (max-width: 991px) {
+    .contact-layout-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    /* Stack the full-width row: contact data on top, CTA + social below. */
+    .contact-details-box {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .details-aside {
+      border-left: none;
+      border-top: 1px solid #e2e2e2;
+      padding-left: 0;
+      padding-top: 2.5rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .form-row-2 {
+      grid-template-columns: 1fr;
+      gap: 1.8rem;
+    }
+    .quotation-form-box {
+      padding: 2rem 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .need-garments-box { padding: 1.5rem; margin-bottom: 1.5rem; }
+    .need-garments-box h2 { font-size: 1.5rem; }
+    .need-garments-box p { font-size: 0.95rem; }
+    .quotation-form-box { padding: 1.75rem 1.25rem; margin-bottom: 2rem; }
+    .quotation-form-box h3 { font-size: 1.7rem; margin-bottom: 1.75rem; }
+    .contact-details-box { padding: 2rem 1.5rem; }
+    .contact-details-box h4 { font-size: 1.3rem; }
+    .contact-info-list { grid-template-columns: 1fr; }
+    .contact-list-orange li { font-size: 0.95rem; }
+    .map-section { padding: 3.5rem 0 5rem; }
+    .map-section-title { font-size: 1.7rem; }
+  }
+</style>

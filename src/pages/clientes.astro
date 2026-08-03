@@ -1,0 +1,606 @@
+---
+export const prerender = true;
+
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import cajaArequipa from '../img/clientes/caja_arequipa.png';
+import poderJudicial from '../img/clientes/poder_judicial.png';
+import essalud from '../img/clientes/essalud.png';
+import cip from '../img/clientes/cip.png';
+import transa from '../img/clientes/transa.png';
+import colegioZarate from '../img/clientes/colegio_zarate.png';
+
+const clients = [
+  { name: "Caja Arequipa", logo: cajaArequipa, category: "Finanzas" },
+  { name: "Poder Judicial", logo: poderJudicial, category: "Gobierno" },
+  { name: "EsSalud / Salud", logo: essalud, category: "Salud" },
+  { name: "Colegio de Ingenieros del Perú", logo: cip, category: "Institucional" },
+  { name: "Transa", logo: transa, category: "Empresarial" },
+  { name: "Colegio Zárate", logo: colegioZarate, category: "Educación" }
+];
+
+// Sectors we serve — high-level audience, not the garments themselves.
+const sectors = [
+  {
+    name: 'Educación',
+    items: ['Colegios', 'Institutos', 'Universidades', 'Academias'],
+    icon: '<path d="M21.42 10.92a1 1 0 0 0-.02-1.84L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.83l8.57 3.91a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+  },
+  {
+    name: 'Corporativo',
+    items: ['Empresas Públicas', 'Empresas Privadas', 'Corporaciones', 'Pymes'],
+    icon: '<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/>',
+  },
+  {
+    name: 'Salud',
+    items: ['Hospitales', 'Clínicas', 'Consultorios', 'Laboratorios'],
+    icon: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.5 4.04 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/>',
+  },
+  {
+    name: 'Sector Financiero',
+    items: ['Bancos', 'Financieras', 'Cajas Municipales'],
+    icon: '<line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/>',
+  },
+  {
+    name: 'Retail',
+    items: ['Supermercados', 'Tiendas', 'Centros Comerciales'],
+    icon: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+  },
+  {
+    name: 'Industria',
+    items: ['Minería', 'Construcción', 'Automotriz', 'Manufactura', 'Logística'],
+    icon: '<path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M17 18h1"/><path d="M12 18h1"/><path d="M7 18h1"/>',
+  },
+  {
+    name: 'Hotelería',
+    items: ['Hoteles', 'Resorts', 'Hostales'],
+    icon: '<path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><path d="M12 4v6"/><path d="M2 18h20"/>',
+  },
+  {
+    name: 'Gastronomía',
+    items: ['Restaurantes', 'Cafeterías', 'Discotecas', 'Cadenas de comida'],
+    icon: '<path d="M3 2v7c0 1.1.9 2 2 2h1a1 1 0 0 0 1-1V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',
+  },
+  {
+    name: 'Eventos',
+    items: ['Promotoras', 'Anfitrionas', 'Ferias', 'Activaciones de Marca'],
+    icon: '<path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5A2 2 0 0 0 15.5 9.94l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/>',
+  },
+];
+
+// End-to-end work process.
+const process = [
+  {
+    title: 'Asesoría',
+    text: 'Escuchamos las necesidades del cliente y brindamos una atención personalizada.',
+    icon: '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>',
+  },
+  {
+    title: 'Diseño',
+    text: 'Desarrollamos una propuesta acorde a la identidad de la empresa o institución.',
+    icon: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  },
+  {
+    title: 'Producción',
+    text: 'Confeccionamos cada prenda con materiales de calidad y procesos especializados.',
+    icon: '<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" x2="8.12" y1="4" y2="15.88"/><line x1="14.47" x2="20" y1="14.48" y2="20"/><line x1="8.12" x2="12" y1="8.12" y2="12"/>',
+  },
+  {
+    title: 'Control de Calidad',
+    text: 'Verificamos cada detalle antes de la entrega para garantizar excelencia.',
+    icon: '<path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/>',
+  },
+  {
+    title: 'Entrega',
+    text: 'Realizamos entregas puntuales a nivel nacional.',
+    icon: '<path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+  },
+];
+
+// Named clients grouped by sector.
+const clientDirectory = [
+  {
+    sector: 'Instituciones Educativas',
+    items: [
+      'Colegio High School',
+      'Colegio Salesiano Santa Rosa',
+      'Colegio Andino',
+      'Colegio Claretiano',
+      'Colegio Ingeniería',
+      'Colegio Unión',
+      'Colegio San Juan Bosco',
+      'Colegio Zárate',
+    ],
+  },
+  {
+    sector: 'Sector Salud',
+    items: [
+      'Clínica Ortega',
+      'Clínica Confía Salud',
+      'Hospital Daniel Alcides Carrión',
+      'Hospital Ramiro Prialé Prialé (EsSalud)',
+      'Hospital El Carmen',
+    ],
+  },
+  {
+    sector: 'Sector Financiero',
+    items: ['Caja Huancayo', 'Caja Arequipa', 'Caja Piura', 'Financiera Confianza'],
+  },
+  {
+    sector: 'Instituciones Públicas',
+    items: [
+      'Poder Judicial del Perú',
+      'Corte Superior de Justicia de la Selva Central',
+      'SAT de Huancayo (SATH)',
+    ],
+  },
+  {
+    sector: 'Minería e Industria',
+    items: ['Volcan Compañía Minera S.A.A.', 'Minera Chinalco Perú S.A.', 'Compañía Minera Antamina S.A.'],
+  },
+  {
+    sector: 'Construcción e Inmobiliario',
+    items: ['Golden Home Inmobiliaria', 'Besco S.A.C.', 'Los Portales S.A.'],
+  },
+  {
+    sector: 'Transporte y Logística',
+    items: ['Transportes Nacionales S.A. – TRANSA', 'Cruz del Sur', 'Transportes Línea S.A.'],
+  },
+  {
+    sector: 'Hotelería y Turismo',
+    items: ['Compañía Hotelera del Centro', 'Hotel Presidente Huancayo', 'Hotel Gran Palma Huancayo'],
+  },
+  {
+    sector: 'Empresas Automotrices',
+    items: ['Toyota del Perú', 'Derco Perú', 'Honda del Perú'],
+  },
+  {
+    sector: 'Empresas Privadas',
+    items: ['Golden Home Inmobiliaria', 'Club La Salle', 'Transportes Nacionales S.A. – TRANSA'],
+  },
+  {
+    sector: 'Supermercados y Retail',
+    items: ['Mass'],
+  },
+];
+---
+
+<Layout
+  title="Nuestros Clientes"
+  description="Instituciones educativas, clínicas, hospitales, cajas, mineras y empresas líderes del Perú confían en FAIR'S COMPANY para sus uniformes y prendas personalizadas. Conoce los sectores que atendemos."
+>
+  <div class="page-header scroll-animate">
+    <div class="container">
+      <h1>Nuestros Clientes</h1>
+      <p>Marcas e instituciones de prestigio confían en nosotros.</p>
+    </div>
+  </div>
+
+  <section class="section container text-center">
+    <div class="scroll-animate">
+      <h2 class="clients-heading">LA CONFIANZA ES NUESTRO MEJOR TEJIDO</h2>
+      <p class="clients-subtitle">
+        Nos enorgullece ser el proveedor de confianza para empresas, instituciones educativas, entidades del sector
+        salud, financiero e industrial en todo el país. Cada cliente es un testimonio de nuestra dedicación a la
+        calidad, la confección y la puntualidad.
+      </p>
+    </div>
+
+    <div class="clients-grid">
+      {clients.map((client, index) => (
+        <div class={`client-logo scroll-animate animate-delay-${(index % 3) + 1}`} title={client.name}>
+          <div class="logo-wrapper">
+            <Image src={client.logo} width={300} alt={client.name} />
+          </div>
+          <div class="client-info">
+            <h4>{client.name}</h4>
+            <span>{client.category}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Sectores que atendemos -->
+  <section class="section tint-section">
+    <div class="container text-center">
+      <h2 class="section-title scroll-animate">Sectores que atendemos</h2>
+      <p class="section-subtitle scroll-animate animate-delay-1">
+        Desarrollamos soluciones textiles para organizaciones de todos los rubros, adaptándonos a las necesidades de
+        cada sector.
+      </p>
+
+      <div class="sectors-grid">
+        {sectors.map((sector, i) => (
+          <div class={`sector-card scroll-animate animate-delay-${(i % 3) + 1}`}>
+            <div class="sector-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={sector.icon} />
+            </div>
+            <h3>{sector.name}</h3>
+            <ul class="sector-items">
+              {sector.items.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Proceso de trabajo -->
+  <section class="section container text-center">
+    <h2 class="section-title scroll-animate">Nuestro proceso de trabajo</h2>
+    <p class="section-subtitle scroll-animate animate-delay-1">
+      Un servicio integral de principio a fin, pensado para brindarte una experiencia clara y confiable.
+    </p>
+
+    <ol class="process-steps">
+      {process.map((step, i) => (
+        <li class={`process-step scroll-animate animate-delay-${(i % 3) + 1}`}>
+          <div class="process-badge">
+            <span class="process-num">{i + 1}</span>
+            <svg class="process-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" set:html={step.icon} />
+          </div>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- Directorio de clientes por sector -->
+  <section class="section tint-section tint-section--last">
+    <div class="container text-center">
+      <h2 class="section-title scroll-animate">Ellos confían en nosotros</h2>
+      <p class="section-subtitle scroll-animate animate-delay-1">
+        Instituciones y empresas líderes de distintos sectores que han elegido a FAIR'S COMPANY como su aliado textil.
+      </p>
+
+      <div class="directory-grid">
+        {clientDirectory.map((group, i) => (
+          <div class={`directory-card scroll-animate animate-delay-${(i % 3) + 1}`}>
+            <h3 class="directory-sector">{group.sector}</h3>
+            <ul class="directory-list">
+              {group.items.map((name) => (
+                <li>
+                  <svg class="directory-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                  <span>{name}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .text-center { text-align: center; }
+
+  .clients-heading {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    color: var(--color-accent);
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+
+  .clients-subtitle {
+    max-width: 800px;
+    margin: 0 auto 5rem;
+    color: #555;
+    font-size: 1.15rem;
+    line-height: 1.8;
+  }
+
+  .clients-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 3rem;
+  }
+
+  /* Shared section headings */
+
+  /* Tinted sections blend into the white sections around them with a soft
+     gradient at each edge, so the boundary reads as a diffused transition
+     instead of a hard colour seam. */
+  .tint-section {
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-bg) 0,
+      var(--color-tint) 90px,
+      var(--color-tint) calc(100% - 90px),
+      var(--color-bg) 100%
+    );
+  }
+
+  /* Last light section before the dark footer: only the top edge blends,
+     the bottom stays solid so it meets the footer cleanly. */
+  .tint-section--last {
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-bg) 0,
+      var(--color-tint) 90px,
+      var(--color-tint) 100%
+    );
+  }
+
+  .section-title {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: var(--color-accent);
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    max-width: 760px;
+    margin: 0 auto 3.5rem;
+    font-size: 1.1rem;
+    line-height: 1.75;
+    color: #555;
+  }
+
+  /* Sectors grid */
+  .sectors-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+    text-align: left;
+  }
+
+  .sector-card {
+    background: #ffffff;
+    border: 1px solid #ece7e3;
+    border-radius: 14px;
+    padding: 1.8rem;
+    box-shadow: 0 6px 20px rgba(30, 24, 20, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .sector-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 34px rgba(30, 24, 20, 0.1);
+    border-color: rgba(234, 88, 35, 0.35);
+  }
+
+  .sector-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--color-accent);
+    margin-bottom: 1.1rem;
+  }
+  .sector-icon svg { width: 100%; height: 100%; }
+
+  .sector-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.9rem;
+  }
+
+  .sector-items {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    padding: 0;
+    margin: 0;
+  }
+  .sector-items li {
+    font-size: 0.82rem;
+    color: #555;
+    background: #f4f1ef;
+    border: 1px solid #ece7e3;
+    padding: 0.32rem 0.72rem;
+    border-radius: 20px;
+  }
+
+  /* Process steps */
+  .process-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+    position: relative;
+  }
+  /* connecting line behind the badges */
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    top: 34px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, rgba(234,88,35,0.35) 0 8px, transparent 8px 16px);
+    z-index: 0;
+  }
+
+  .process-step {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .process-badge {
+    position: relative;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid var(--color-accent);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 8px 20px rgba(234, 88, 35, 0.14);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .process-step:hover .process-badge { transform: translateY(-5px) scale(1.05); }
+  .process-icon { width: 28px; height: 28px; }
+  .process-num {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .process-step h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+  }
+  .process-step p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #666;
+    max-width: 200px;
+  }
+
+  /* Client directory */
+  .directory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    text-align: left;
+  }
+
+  .directory-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 1.6rem 1.7rem;
+    box-shadow: 0 6px 20px rgba(30, 24, 20, 0.05);
+    border-top: 3px solid var(--color-accent);
+  }
+
+  .directory-sector {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+    letter-spacing: 0.3px;
+  }
+
+  .directory-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .directory-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.94rem;
+    line-height: 1.4;
+    color: #444;
+  }
+  .directory-check {
+    width: 16px;
+    height: 16px;
+    color: var(--color-accent);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  /* Existing client-logo cards */
+  .client-logo {
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 3rem 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+
+  .logo-wrapper {
+    height: 120px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .client-logo img {
+    max-width: 90%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.4s ease;
+  }
+
+  .client-info h4 {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    color: var(--color-text);
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+
+  .client-info span {
+    font-size: 0.85rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .client-logo:hover {
+    box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+    transform: translateY(-8px);
+    border-color: var(--color-accent);
+  }
+  .client-logo:hover img { transform: scale(1.05); }
+
+  @media (max-width: 991px) {
+    .sectors-grid { grid-template-columns: repeat(2, 1fr); }
+    .process-steps { grid-template-columns: repeat(2, 1fr); gap: 2.5rem 1.5rem; }
+    .process-steps::before { display: none; }
+  }
+
+  @media (max-width: 768px) {
+    .clients-heading { font-size: 2rem; }
+    .clients-subtitle { font-size: 1rem; margin-bottom: 3rem; }
+    .section-title { font-size: 2.1rem; }
+    .section-subtitle { font-size: 1rem; margin-bottom: 2.5rem; }
+    .clients-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+    .client-logo { padding: 2rem 1.5rem; }
+    .logo-wrapper { height: 90px; margin-bottom: 1.25rem; }
+  }
+
+  @media (max-width: 560px) {
+    .sectors-grid { grid-template-columns: 1fr; }
+    .process-steps { grid-template-columns: 1fr; gap: 2rem; }
+    .clients-heading { font-size: 1.6rem; }
+    .clients-grid { grid-template-columns: 1fr; }
+    .directory-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,291 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { getHeroSlides } from '../../db/client';
+import { resolveHeroSlides } from '../../lib/hero';
+
+export const prerender = false;
+
+const error = Astro.url.searchParams.get('error');
+const saved = Astro.url.searchParams.get('saved');
+
+const rows = getHeroSlides();
+const views = resolveHeroSlides(rows);
+
+const isUpload = (v: string | null | undefined) => !!v && v.startsWith('/uploads/');
+
+const slides = [0, 1, 2, 3].map((slot) => {
+  const row = rows.find((r) => r.sort_order === slot);
+  return {
+    slot,
+    editable: slot < 2,
+    label:
+      slot === 0
+        ? 'Slide 1 — Cambiante (personas)'
+        : slot === 1
+          ? 'Slide 2 — Cambiante (obrero)'
+          : slot === 2
+            ? 'Slide 3 — Fija (experiencia)'
+            : 'Slide 4 — Fija (llegamos a todo el Perú)',
+    row,
+    view: views[slot],
+    desktopOverridden: isUpload(row?.image_url),
+    mobileOverridden: isUpload(row?.mobile_image_url),
+  };
+});
+---
+
+<AdminLayout title="Banners">
+  <h1>Banners del Hero</h1>
+  <p class="lead">
+    El hero tiene <strong>4 slides</strong>. Cada uno tiene dos imágenes: una para <strong>PC (escritorio)</strong>
+    y otra para <strong>móvil</strong>. Puedes ver la imagen que se está usando y reemplazarla.
+    En los <strong>slides 1 y 2</strong> (cambiantes) además editas el título, subtítulo y el botón.
+    Los <strong>slides 3 y 4</strong> son fijos (la imagen ya trae su texto) y no tienen botón.
+  </p>
+
+  {error && <p class="admin-error">{decodeURIComponent(error)}</p>}
+  {saved && <p class="admin-success">Cambios guardados correctamente.</p>}
+
+  {slides.map(({ slot, editable, label, row, view, desktopOverridden, mobileOverridden }) => (
+    <section class="admin-panel">
+      <div class="panel-head">
+        <h2>{label}</h2>
+        <span class={`badge ${editable ? 'badge-edit' : 'badge-fixed'}`}>
+          {editable ? 'Con texto y botón' : 'Solo imagen'}
+        </span>
+      </div>
+
+      <form method="POST" action="/api/admin/banners" enctype="multipart/form-data">
+        <input type="hidden" name="action" value="save_slide" />
+        <input type="hidden" name="slot" value={slot} />
+
+        <div class="modes-grid">
+          {/* Desktop / PC image */}
+          <div class="mode-card">
+            <div class="mode-head">
+              <span class="mode-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+              </span>
+              <strong>Imagen PC (escritorio)</strong>
+              {desktopOverridden ? <span class="tag tag-custom">Personalizada</span> : <span class="tag tag-default">Por defecto</span>}
+            </div>
+
+            <div class="current-preview current-preview--wide">
+              <img src={view.image} alt={`Imagen PC actual del slide ${slot + 1}`} />
+            </div>
+
+            <label for={`img-${slot}`}>Reemplazar imagen PC</label>
+            <input id={`img-${slot}`} type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif" data-preview-target={`img-preview-${slot}`} />
+            <img id={`img-preview-${slot}`} class="file-preview" alt="Vista previa nueva (PC)" hidden />
+
+            {desktopOverridden && (
+              <label class="reset-check" for={`reset-desktop-${slot}`}>
+                <input id={`reset-desktop-${slot}`} type="checkbox" name="reset_desktop" value="1" />
+                Restaurar imagen PC por defecto
+              </label>
+            )}
+          </div>
+
+          {/* Mobile image */}
+          <div class="mode-card">
+            <div class="mode-head">
+              <span class="mode-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>
+              </span>
+              <strong>Imagen Móvil</strong>
+              {mobileOverridden ? <span class="tag tag-custom">Personalizada</span> : <span class="tag tag-default">Por defecto</span>}
+            </div>
+
+            <div class="current-preview current-preview--tall">
+              <img src={view.mobileImage} alt={`Imagen móvil actual del slide ${slot + 1}`} />
+            </div>
+
+            <label for={`mimg-${slot}`}>Reemplazar imagen móvil</label>
+            <input id={`mimg-${slot}`} type="file" name="mobile_image" accept="image/png,image/jpeg,image/webp,image/gif" data-preview-target={`mimg-preview-${slot}`} />
+            <img id={`mimg-preview-${slot}`} class="file-preview" alt="Vista previa nueva (móvil)" hidden />
+
+            {mobileOverridden && (
+              <label class="reset-check" for={`reset-mobile-${slot}`}>
+                <input id={`reset-mobile-${slot}`} type="checkbox" name="reset_mobile" value="1" />
+                Restaurar imagen móvil por defecto
+              </label>
+            )}
+          </div>
+        </div>
+
+        {editable && (
+          <div class="text-fields">
+            <div class="admin-field">
+              <label for={`title-${slot}`}>Título</label>
+              <input id={`title-${slot}`} type="text" name="title" value={row?.title ?? ''} placeholder="Título principal del slide" />
+            </div>
+            <div class="admin-field">
+              <label for={`subtitle-${slot}`}>Subtítulo</label>
+              <input id={`subtitle-${slot}`} type="text" name="subtitle" value={row?.subtitle ?? ''} placeholder="Texto descriptivo debajo del título" />
+            </div>
+            <div class="admin-field">
+              <label for={`cta-${slot}`}>Texto del botón</label>
+              <input id={`cta-${slot}`} type="text" name="cta_text" value={row?.cta_text ?? ''} placeholder="Ej. CONOCE NUESTROS SERVICIOS" />
+            </div>
+            <div class="admin-field">
+              <label for={`link-${slot}`}>Enlace del botón</label>
+              <input id={`link-${slot}`} type="text" name="link_url" value={row?.link_url ?? ''} placeholder="/contacto" />
+            </div>
+            <p class="field-hint">Deja el <strong>texto del botón</strong> vacío si no quieres mostrar botón en este slide.</p>
+          </div>
+        )}
+
+        <button type="submit" class="btn-small">Guardar slide {slot + 1}</button>
+      </form>
+    </section>
+  ))}
+</AdminLayout>
+
+<script>
+  document.querySelectorAll<HTMLInputElement>('input[type="file"][data-preview-target]').forEach((input) => {
+    const targetId = input.dataset.previewTarget;
+    if (!targetId) return;
+    const preview = document.getElementById(targetId) as HTMLImageElement | null;
+    if (!preview) return;
+
+    input.addEventListener('change', () => {
+      const file = input.files?.[0];
+      if (!file) {
+        preview.hidden = true;
+        preview.removeAttribute('src');
+        return;
+      }
+      preview.src = URL.createObjectURL(file);
+      preview.hidden = false;
+    });
+  });
+</script>
+
+<style>
+  .lead { color: #666; margin-bottom: 2rem; max-width: 760px; line-height: 1.6; }
+  .admin-success {
+    background: #e6f4ea;
+    color: #1e8e3e;
+    border: 1px solid #a8d5b5;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    flex-wrap: wrap;
+  }
+  .panel-head h2 { margin: 0; }
+  .badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+  }
+  .badge-edit { background: rgba(234, 88, 35, 0.12); color: #ea5823; }
+  .badge-fixed { background: #eef0f2; color: #667; }
+
+  .modes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .mode-card {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 1.1rem;
+    background: #fafafa;
+  }
+  .mode-head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0.9rem;
+  }
+  .mode-head strong { font-size: 0.95rem; }
+  .mode-icon { color: #ea5823; display: inline-flex; }
+  .mode-icon svg { width: 18px; height: 18px; }
+  .tag {
+    margin-left: auto;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 0.22rem 0.55rem;
+    border-radius: 6px;
+  }
+  .tag-custom { background: #e6f4ea; color: #1e8e3e; }
+  .tag-default { background: #eef0f2; color: #7a8290; }
+
+  .current-preview {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e6e6e6;
+    background: #fff;
+    margin-bottom: 1rem;
+  }
+  .current-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .current-preview--wide { aspect-ratio: 1905 / 825; }
+  .current-preview--tall {
+    aspect-ratio: 9 / 16;
+    max-width: 190px;
+  }
+
+  .mode-card label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 0.4rem;
+  }
+  .mode-card input[type='file'] { font-size: 0.85rem; width: 100%; }
+
+  .file-preview[hidden] { display: none; }
+  .file-preview {
+    display: block;
+    margin-top: 0.7rem;
+    max-width: 100%;
+    max-height: 170px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 1px dashed #ea5823;
+  }
+
+  .reset-check {
+    display: flex !important;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+    font-size: 0.82rem;
+    font-weight: 500 !important;
+    color: #b23c17 !important;
+    cursor: pointer;
+  }
+  .reset-check input { width: auto !important; }
+
+  .text-fields {
+    border-top: 1px solid #eee;
+    padding-top: 1.3rem;
+    margin-bottom: 1.3rem;
+  }
+  .field-hint {
+    font-size: 0.82rem;
+    color: #888;
+    margin: -0.4rem 0 0;
+  }
+
+  @media (max-width: 720px) {
+    .modes-grid { grid-template-columns: 1fr; }
+  }
+</style>

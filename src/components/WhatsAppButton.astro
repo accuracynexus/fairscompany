@@ -1,0 +1,98 @@
+---
+const phoneNumber = "51934336181";
+const message = "Hola! Quisiera más información sobre sus prendas personalizadas.";
+const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+---
+
+<a href={waUrl} target="_blank" rel="noopener noreferrer" class="wa-button" aria-label="Chatear por WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor">
+    <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-23.1-115-65-157zM223.9 414.7c-33.1 0-65.5-8.9-94-25.7l-6.7-4-69.8 18.3L72 334.1l-4.4-7.1c-18.4-29.6-28.1-64-28.1-99.1 0-103.5 84.3-187.8 187.9-187.8 50.2 0 97.4 19.5 132.9 55.1 35.5 35.6 55.1 82.7 55.1 133 0 103.6-84.3 187.8-187.9 187.8zM326.6 280c-5.6-2.8-33.3-16.4-38.5-18.3-5.2-1.9-9-2.8-12.8 2.8-3.7 5.6-14.6 18.3-17.9 22.1-3.3 3.8-6.6 4.2-12.2 1.4-5.6-2.8-23.7-8.8-45.2-28.1-16.7-15-28-33.5-31.3-39.1-3.3-5.6-.3-8.6 2.5-11.4 2.5-2.5 5.6-6.6 8.5-9.9 2.8-3.3 3.8-5.6 5.6-9.4 1.9-3.7.9-7.1-.5-9.9-1.4-2.8-12.8-30.9-17.5-42.3-4.6-11.2-9.3-9.7-12.8-9.9-3.3-.2-7.1-.2-10.8-.2-3.7 0-9.9 1.4-15.1 7.1-5.2 5.6-19.8 19.3-19.8 47s20.2 54.4 23 58.2c2.8 3.8 39.7 60.6 96.1 85 13.4 5.8 23.9 9.3 32.1 11.9 13.5 4.3 25.8 3.7 35.5 2.2 10.9-1.7 33.3-13.6 38-26.8 4.6-13.2 4.6-24.4 3.3-26.8-1.4-2.4-5.2-3.8-10.8-6.6z"/>
+  </svg>
+</a>
+
+<style>
+  .wa-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--color-whatsapp);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    z-index: 1000;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: wa-bounce 1s ease 2s both;
+  }
+
+  .wa-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background-color: var(--color-whatsapp);
+    z-index: -1;
+    animation: wa-pulse 2.2s ease-out infinite;
+  }
+
+  .wa-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+  }
+
+  .wa-button svg {
+    width: 35px;
+    height: 35px;
+    transform-origin: 50% 50%;
+    animation: wa-wiggle 3s ease-in-out infinite;
+  }
+
+  @keyframes wa-bounce {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes wa-pulse {
+    0% { transform: scale(1); opacity: 0.55; }
+    100% { transform: scale(1.9); opacity: 0; }
+  }
+
+  @keyframes wa-wiggle {
+    0%, 34%, 100% { transform: rotate(0deg); }
+    4% { transform: rotate(-10deg); }
+    8% { transform: rotate(9deg); }
+    12% { transform: rotate(-8deg); }
+    16% { transform: rotate(7deg); }
+    20% { transform: rotate(-5deg); }
+    24% { transform: rotate(4deg); }
+    28% { transform: rotate(-2deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wa-button::before {
+      animation: none;
+      display: none;
+    }
+    .wa-button svg {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .wa-button {
+      width: 52px;
+      height: 52px;
+      bottom: 18px;
+      right: 18px;
+    }
+    .wa-button svg {
+      width: 28px;
+      height: 28px;
+    }
+  }
+</style>

@@ -1,0 +1,638 @@
+---
+export const prerender = true;
+
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import usHeroImg from '../img/secciones/us-hero.jpg';
+import usImg from '../img/secciones/us.jpg';
+
+const timeline = [
+  {
+    title: 'Nuestros inicios',
+    text: 'Damos nuestros primeros pasos en la confección textil, sentando las bases de calidad y compromiso que nos definen hasta hoy.',
+  },
+  {
+    title: 'Crecimiento y especialización',
+    text: 'Ampliamos nuestra experiencia hacia uniformes corporativos, escolares, médicos e institucionales.',
+  },
+  {
+    title: 'Expansión de cobertura',
+    text: 'Fortalecemos nuestra capacidad productiva y llevamos nuestras soluciones a distintos sectores económicos del país.',
+  },
+  {
+    title: 'Más de 30 años de trayectoria',
+    text: 'Consolidamos una experiencia de más de tres décadas en el mercado textil peruano.',
+  },
+  {
+    title: 'Actualidad',
+    text: 'Hoy somos aliados estratégicos de empresas e instituciones, con un servicio integral de principio a fin.',
+  },
+];
+
+const values = [
+  {
+    name: 'Responsabilidad',
+    desc: 'Actuamos con compromiso en cada etapa del proceso, garantizando un trabajo eficiente y el cumplimiento de nuestros compromisos.',
+    icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 11 2 2 4-4"/>',
+  },
+  {
+    name: 'Puntualidad',
+    desc: 'Respetamos los tiempos acordados para brindar entregas oportunas y un servicio confiable.',
+    icon: '<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/>',
+  },
+  {
+    name: 'Compromiso',
+    desc: 'Nos involucramos en cada proyecto con dedicación, buscando superar las expectativas de nuestros clientes.',
+    icon: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>',
+  },
+  {
+    name: 'Calidad',
+    desc: 'Elaboramos prendas con materiales seleccionados y procesos que garantizan durabilidad, comodidad y excelentes acabados.',
+    icon: '<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>',
+  },
+];
+
+const reasons = [
+  'Más de 30 años de experiencia en el mercado textil.',
+  'Diseño y confección totalmente personalizados.',
+  'Materiales certificados y de alta calidad.',
+  'Acabados profesionales.',
+  'Atención personalizada.',
+  'Producción para pequeñas, medianas y grandes cantidades.',
+  'Entregas a nivel nacional.',
+  'Soluciones para diferentes sectores económicos.',
+];
+---
+
+<Layout
+  title="Nosotros"
+  description="Más de 30 años confeccionando uniformes y prendas personalizadas en el Perú. Conoce la trayectoria, misión, visión y valores de FAIR'S COMPANY, tu aliado textil de confianza."
+>
+  <!-- Short Header Banner -->
+  <section class="nosotros-banner scroll-animate">
+    <div class="banner-left">
+      <div class="banner-title-box">
+        <h1>NOSOTROS</h1>
+      </div>
+    </div>
+    <div class="banner-right">
+      <Image src={usHeroImg} width={900} height={600} alt="Taller de Confección Fair's Company" />
+    </div>
+  </section>
+
+  <!-- Quiénes Somos Section -->
+  <section class="who-we-are-container">
+    <div class="container" style="max-width: 900px;">
+      <div class="who-we-are-card scroll-animate">
+        <div class="card-left">
+          <h2>¿Quiénes<br>somos?</h2>
+          <div class="arrow-icon">&rarr;</div>
+        </div>
+        <div class="card-decor-bg"></div>
+        <div class="card-image-wrapper">
+          <Image src={usImg} width={500} height={500} alt="Taller Textil Us" />
+        </div>
+      </div>
+
+      <div class="about-text-content scroll-animate animate-delay-1">
+        <p>
+          <strong>FAIR'S COMPANY</strong> es una empresa peruana con más de 30 años de experiencia en el mercado textil, especializada en el diseño, confección y personalización de uniformes y prendas para empresas, instituciones educativas, entidades públicas y privadas.
+        </p>
+        <p>
+          Nos enfocamos en desarrollar soluciones textiles que combinan calidad, funcionalidad y diseño, adaptándonos a las necesidades de cada cliente y fortaleciendo la imagen corporativa e institucional de las organizaciones que confían en nosotros.
+        </p>
+        <p>
+          Gracias a nuestra trayectoria, experiencia y compromiso, hemos participado en proyectos para diversos sectores económicos, ofreciendo productos duraderos, personalizados y elaborados con altos estándares de calidad.
+        </p>
+        <p>
+          Nuestro objetivo es convertirnos en un aliado estratégico para cada cliente, brindando un servicio integral que abarca desde el diseño hasta la entrega final.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trayectoria / Timeline Section -->
+  <section class="section timeline-section section--tint">
+    <div class="container text-center">
+      <h2 class="section-title scroll-animate">NUESTRA TRAYECTORIA</h2>
+      <p class="section-subtitle scroll-animate animate-delay-1">
+        Más de 30 años construyendo confianza, prenda a prenda.
+      </p>
+
+      <div class="timeline">
+        {timeline.map((item, i) => (
+          <div class={`timeline-item scroll-animate animate-delay-${(i % 3) + 1}`}>
+            <div class="timeline-marker">
+              <span class="timeline-dot"></span>
+            </div>
+            <div class="timeline-content">
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Misión y Visión Section -->
+  <section class="section mission-vision-section">
+    <div class="container">
+      <div class="mv-grid">
+        <div class="mv-card scroll-animate">
+          <span class="mv-label">Misión</span>
+          <p>
+            Brindar soluciones textiles personalizadas mediante la confección de uniformes, prendas corporativas, escolares, médicas e industriales, elaboradas con altos estándares de calidad, innovación y compromiso. Nos enfocamos en satisfacer las necesidades de nuestros clientes, fortaleciendo la identidad de sus organizaciones con productos funcionales, cómodos y duraderos.
+          </p>
+        </div>
+        <div class="mv-card mv-card-accent scroll-animate animate-delay-1">
+          <span class="mv-label">Visión</span>
+          <p>
+            Ser una empresa líder en el sector textil a nivel nacional, reconocida por la excelencia de nuestros productos, la innovación en nuestros diseños y la confianza que generamos en empresas, instituciones educativas, organizaciones públicas y privadas, consolidándonos como un referente en soluciones textiles personalizadas.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Valor Agregado Section -->
+  <section class="section value-added-section section--tint">
+    <div class="container text-center">
+      <h2 class="section-title scroll-animate">NUESTROS VALORES</h2>
+      <p class="section-subtitle scroll-animate animate-delay-1">
+        Nos diferenciamos por ofrecer soluciones textiles personalizadas, combinando calidad, innovación y un servicio comprometido para superar las expectativas de cada cliente.
+      </p>
+
+      <div class="values-grid">
+        {values.map((value, i) => (
+          <div class={`value-card scroll-animate animate-delay-${(i % 3) + 1}`}>
+            <div class="value-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={value.icon} />
+            </div>
+            <h3>{value.name.toUpperCase()}</h3>
+            <p>{value.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ¿Por qué elegir Fair's Company? -->
+  <section class="section why-us-section">
+    <div class="container text-center">
+      <h2 class="section-title scroll-animate">¿POR QUÉ ELEGIR FAIR'S COMPANY?</h2>
+
+      <div class="reasons-grid">
+        {reasons.map((reason, i) => (
+          <div class={`reason-item scroll-animate animate-delay-${(i % 3) + 1}`}>
+            <svg class="reason-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            <span>{reason}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .text-center {
+    text-align: center;
+  }
+
+  /* Nosotros Header Banner */
+  /* Fluid hero: height, paddings and type all scale with the viewport, so the
+     title box always fits inside the orange panel instead of overflowing it at
+     narrow widths. */
+  .nosotros-banner {
+    display: flex;
+    height: clamp(170px, 26vw, 300px);
+    width: 100%;
+    margin-top: 0;
+    overflow: hidden;
+  }
+
+  .banner-left {
+    width: 40%;
+    flex-shrink: 0;
+    background-color: var(--color-accent); /* Orange #ea5823 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(0.75rem, 2.5vw, 2rem);
+  }
+
+  .banner-title-box {
+    border: clamp(2px, 0.3vw, 3px) solid #ffffff;
+    padding: clamp(0.45rem, 1.6vw, 1rem) clamp(0.7rem, 3.2vw, 2.5rem);
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .banner-title-box h1 {
+    color: #ffffff;
+    font-family: var(--font-heading); /* Oswald */
+    font-size: clamp(0.95rem, 3.2vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: clamp(1px, 0.4vw, 4px);
+    margin: 0;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .banner-right {
+    width: 60%;
+    position: relative;
+  }
+
+  .banner-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Who we are Section */
+  .who-we-are-container {
+    position: relative;
+    padding: 6rem 0;
+    background-color: #ffffff;
+  }
+
+  .who-we-are-card {
+    border: 2px solid var(--color-accent);
+    background-color: #ffffff;
+    padding: 3rem;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    height: 250px;
+    overflow: visible;
+    margin-bottom: 4rem;
+    margin-top: 30px;
+    box-sizing: border-box;
+  }
+
+  .card-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 2;
+  }
+
+  .card-left h2 {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    color: var(--color-accent);
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0;
+    text-transform: none;
+  }
+
+  .card-left .arrow-icon {
+    font-size: 2.5rem;
+    color: var(--color-accent);
+    line-height: 1;
+  }
+
+  /* Slanted orange background polygon matching second image */
+  .card-decor-bg {
+    position: absolute;
+    top: 0;
+    right: 210px;
+    width: 250px;
+    height: 100%;
+    background-color: var(--color-accent);
+    clip-path: polygon(100% 0, 35% 0, 0% 100%, 100% 100%);
+    z-index: 1;
+  }
+
+  .card-image-wrapper {
+    position: absolute;
+    top: -30px;
+    right: 50px;
+    bottom: -30px;
+    width: 260px;
+    z-index: 2;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  }
+
+  .card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  .about-text-content {
+    width: 100%;
+    padding-top: 2rem;
+  }
+
+  .about-text-content p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-text-content p strong {
+    color: #111;
+  }
+
+  /* Shared section title/subtitle */
+  .section-title {
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: var(--color-accent);
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-subtitle {
+    max-width: 800px;
+    margin: 0 auto 5rem;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #555;
+  }
+
+  /* Alternating warm-tint sections. Each tinted section is flanked by white
+     sections, so it blends into them with a soft gradient at both edges —
+     the boundary reads as a diffused transition instead of a hard seam. */
+  .section--tint {
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-bg) 0,
+      var(--color-tint) 90px,
+      var(--color-tint) calc(100% - 90px),
+      var(--color-bg) 100%
+    );
+  }
+
+  /* Timeline Section */
+  .timeline-section {
+    position: relative;
+  }
+
+  .timeline {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: left;
+    position: relative;
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 1.75rem;
+    position: relative;
+    padding-bottom: 3rem;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-marker {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 20px;
+  }
+
+  .timeline-marker::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    bottom: -3rem;
+    width: 2px;
+    background: rgba(234, 88, 35, 0.25);
+  }
+
+  .timeline-item:last-child .timeline-marker::before {
+    display: none;
+  }
+
+  .timeline-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    border: 4px solid #fdece3;
+    z-index: 1;
+  }
+
+  .timeline-content h3 {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.3px;
+  }
+
+  .timeline-content p {
+    color: #666;
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  /* Misión y Visión Section */
+  .mission-vision-section {
+    position: relative;
+    background-color: #ffffff;
+  }
+
+  .mv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
+
+  .mv-card {
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border-top: 4px solid var(--color-accent);
+  }
+
+  .mv-card-accent {
+    background: var(--color-header);
+    border-top: 4px solid var(--color-accent);
+  }
+
+  .mv-label {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 1.2rem;
+  }
+
+  .mv-card p {
+    font-size: 1.02rem;
+    line-height: 1.8;
+    color: #555;
+  }
+
+  .mv-card-accent p {
+    color: #ccc;
+  }
+
+  /* Valor Agregado Section */
+  .value-added-section {
+    position: relative;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.5rem;
+  }
+
+  .value-card {
+    background-color: transparent;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .value-icon {
+    width: 55px;
+    height: 55px;
+    color: var(--color-accent);
+    margin: 0 auto 2.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .value-card:hover .value-icon {
+    transform: scale(1.15) translateY(-5px);
+  }
+
+  .value-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .value-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+  }
+
+  .value-card p {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  /* Why Us Section */
+  .why-us-section {
+    background-color: #ffffff;
+  }
+
+  .reasons-grid {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem 2rem;
+    text-align: left;
+  }
+
+  .reason-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    background: #ffffff;
+    padding: 1.1rem 1.3rem;
+    border-radius: 6px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  }
+
+  .reason-check {
+    width: 20px;
+    height: 20px;
+    color: var(--color-accent);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .reason-item span {
+    color: #444;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 991px) {
+    .who-we-are-card {
+      height: auto;
+      flex-direction: column;
+      padding: 2rem;
+      margin-top: 0;
+    }
+    .card-decor-bg {
+      display: none;
+    }
+    .card-image-wrapper {
+      position: relative;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 250px;
+      margin-top: 2rem;
+    }
+    .values-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+    .mv-grid {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+    .reasons-grid {
+      grid-template-columns: 1fr;
+    }
+    .who-we-are-container { padding: 4rem 0; }
+    .value-added-section,
+    .timeline-section,
+    .mission-vision-section,
+    .why-us-section {
+      padding: 4rem 0;
+    }
+    .section-title { font-size: 2.4rem; margin-bottom: 1.2rem; }
+    .section-subtitle { margin-bottom: 3rem; font-size: 1.05rem; }
+  }
+
+  @media (max-width: 480px) {
+    /* Give the orange panel a bit more room on phones so the title box keeps
+       a comfortable margin instead of hugging the edges. */
+    .banner-left { width: 46%; }
+    .banner-right { width: 54%; }
+    .card-left h2 { font-size: 2.2rem; }
+    .card-left .arrow-icon { font-size: 2rem; }
+    .who-we-are-card { padding: 1.5rem; }
+    .card-image-wrapper { height: 200px; }
+    .about-text-content p { font-size: 0.98rem; }
+    .section-title { font-size: 1.9rem; }
+    .value-card { padding: 1.2rem; }
+    .values-grid { grid-template-columns: 1fr; }
+    .mv-card { padding: 2rem; }
+    .timeline-item { gap: 1.2rem; padding-bottom: 2.2rem; }
+    .timeline-marker::before { bottom: -2.2rem; }
+  }
+</style>

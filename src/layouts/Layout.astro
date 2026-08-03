@@ -1,0 +1,190 @@
+---
+import { getImage } from 'astro:assets';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SplashScreen from '../components/SplashScreen.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import QuickViewModal from '../components/QuickViewModal.astro';
+import brandMark from '../img/logo/logo-splash.png';
+
+interface Props {
+	title: string;
+	description?: string;
+	keywords?: string;
+	image?: string;
+	noindex?: boolean;
+}
+
+const DEFAULT_DESCRIPTION =
+	"FAIR'S COMPANY es un fabricante peruano con más de 30 años de experiencia en la confección de uniformes corporativos, escolares, médicos e industriales y prendas personalizadas. Diseño, bordado y estampado a medida, con entregas a nivel nacional.";
+
+const DEFAULT_KEYWORDS = [
+	'uniformes corporativos Perú',
+	'uniformes personalizados',
+	'casacas de promoción',
+	'casacas escolares',
+	'buzos escolares',
+	'polos corporativos',
+	'uniformes médicos',
+	'uniformes industriales',
+	'ropa de trabajo',
+	'confección textil Perú',
+	'merchandising corporativo',
+	'uniformes para empresas',
+	'casacas personalizadas',
+	'polos personalizados',
+	'fabricante de uniformes',
+].join(', ');
+
+const {
+	title,
+	description = DEFAULT_DESCRIPTION,
+	keywords = DEFAULT_KEYWORDS,
+	image,
+	noindex = false,
+} = Astro.props;
+
+const favicon = await getImage({ src: brandMark, width: 256, format: 'png' });
+const ogImage = await getImage({ src: brandMark, width: 1200, format: 'png' });
+
+const SITE_NAME = "FAIR'S COMPANY";
+const siteUrl = Astro.site ?? new URL('https://fairscompany.com');
+const canonicalURL = new URL(Astro.url.pathname, siteUrl).href;
+const socialImageURL = image ? new URL(image, siteUrl).href : new URL(ogImage.src, siteUrl).href;
+const fullTitle = `${title} | ${SITE_NAME}`;
+
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@type': 'ClothingStore',
+	name: SITE_NAME,
+	alternateName: "Fair's Company",
+	description: DEFAULT_DESCRIPTION,
+	image: socialImageURL,
+	logo: socialImageURL,
+	url: siteUrl.href,
+	telephone: '+51934336181',
+	email: 'ventas@fairscompany.com',
+	priceRange: '$$',
+	address: {
+		'@type': 'PostalAddress',
+		streetAddress: 'Los Aperos 150, La Molina',
+		addressLocality: 'Ate',
+		addressRegion: 'Lima',
+		addressCountry: 'PE',
+	},
+	geo: {
+		'@type': 'GeoCoordinates',
+		latitude: -12.064731,
+		longitude: -76.940563,
+	},
+	openingHoursSpecification: [
+		{
+			'@type': 'OpeningHoursSpecification',
+			dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+			opens: '09:30',
+			closes: '18:00',
+		},
+		{
+			'@type': 'OpeningHoursSpecification',
+			dayOfWeek: ['Saturday'],
+			opens: '09:30',
+			closes: '13:00',
+		},
+	],
+	areaServed: { '@type': 'Country', name: 'Perú' },
+	sameAs: [
+		'https://www.facebook.com/share/1Gpv3S2KNE/?mibextid=wwXIfr',
+		'https://www.instagram.com/fairs.company',
+		'https://www.tiktok.com/@fairstyle6',
+		'https://wa.me/51934336181',
+	],
+};
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/png" href={favicon.src} />
+		<link rel="apple-touch-icon" href={favicon.src} />
+		<meta name="generator" content={Astro.generator} />
+
+		<!-- Primary SEO -->
+		<title>{fullTitle}</title>
+		<meta name="description" content={description} />
+		<meta name="keywords" content={keywords} />
+		<meta name="author" content={SITE_NAME} />
+		<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+		<link rel="canonical" href={canonicalURL} />
+		<meta name="theme-color" content="#ea5823" />
+
+		<!-- Local / geo SEO -->
+		<meta name="geo.region" content="PE-LIM" />
+		<meta name="geo.placename" content="Lima, Perú" />
+		<meta name="geo.position" content="-12.064731;-76.940563" />
+		<meta name="ICBM" content="-12.064731, -76.940563" />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={SITE_NAME} />
+		<meta property="og:title" content={fullTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:image" content={socialImageURL} />
+		<meta property="og:locale" content="es_PE" />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={fullTitle} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={socialImageURL} />
+
+		<!-- Structured data -->
+		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+		<script src="https://unpkg.com/reicon/cdn/reicon.js"></script>
+	</head>
+	<body>
+		<SplashScreen />
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+		<WhatsAppButton />
+		<QuickViewModal />
+		
+		<script>
+		  // Simple scroll animation observer
+		  const observerOptions = {
+		    root: null,
+		    rootMargin: '0px 0px -60px 0px',
+		    threshold: 0.1
+		  };
+		  
+		  const observer = new IntersectionObserver((entries) => {
+		    entries.forEach(entry => {
+		      if (entry.isIntersecting) {
+		        entry.target.classList.add('animate-fade-in');
+		        observer.unobserve(entry.target); // Unobserve after animating once
+		      }
+		    });
+		  }, observerOptions);
+		  
+		  // Run observer on elements with .scroll-animate
+		  document.addEventListener('DOMContentLoaded', () => {
+		    const animatedElements = document.querySelectorAll('.scroll-animate');
+		    animatedElements.forEach(el => observer.observe(el));
+		  });
+		</script>
+	</body>
+</html>
+
+<style>
+  main {
+    padding-top: var(--header-height); 
+    min-height: calc(100vh - 300px); 
+  }
+</style>
