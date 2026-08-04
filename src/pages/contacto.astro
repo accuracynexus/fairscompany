@@ -2,6 +2,7 @@
 export const prerender = true;
 
 import Layout from '../layouts/Layout.astro';
+import HeaderPattern from '../components/HeaderPattern.astro';
 import contactoImg from '../img/secciones/contacto.jpg';
 
 const faqs = [
@@ -43,6 +44,7 @@ const coverageCities = [
 >
   <!-- Section Title Header -->
   <div class="page-header scroll-animate">
+    <HeaderPattern />
     <div class="container">
       <h1>CONTACTANOS</h1>
       <p>Comunícate con nosotros para solicitar tu cotización o resolver tus dudas.</p>

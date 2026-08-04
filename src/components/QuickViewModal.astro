@@ -1,4 +1,6 @@
 ---
+import PhotoBadge from './PhotoBadge.astro';
+
 const WHATSAPP_NUMBER = '51964525381';
 ---
 
@@ -9,7 +11,11 @@ const WHATSAPP_NUMBER = '51964525381';
 
     <div class="qv-image-wrap">
       <img id="qv-image" class="qv-image" src="" alt="" />
+      <PhotoBadge />
     </div>
+
+    <!-- Only rendered when the opener supplies more than one photo. -->
+    <div id="qv-thumbs" class="qv-thumbs" hidden></div>
 
     <div class="qv-body">
       <p class="qv-eyebrow">Vista rápida</p>
@@ -41,22 +47,51 @@ const WHATSAPP_NUMBER = '51964525381';
     const titleEl = modal.querySelector('#qv-title');
     const imageEl = modal.querySelector('#qv-image');
     const imageWrap = modal.querySelector('.qv-image-wrap');
+    const thumbsEl = modal.querySelector('#qv-thumbs');
     const quantityInput = modal.querySelector('#qv-quantity');
     const waButton = modal.querySelector('#qv-whatsapp-btn');
     let lastFocused = null;
 
-    function openModal(productName, productImage) {
+    function showThumbs(images, productName) {
+      thumbsEl.replaceChildren();
+      if (images.length < 2) {
+        thumbsEl.hidden = true;
+        return;
+      }
+      images.forEach((src, i) => {
+        const thumb = document.createElement('button');
+        thumb.type = 'button';
+        thumb.className = 'qv-thumb' + (i === 0 ? ' active' : '');
+        thumb.setAttribute('aria-label', `Foto ${i + 1} de ${images.length}`);
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = '';
+        img.loading = 'lazy';
+        thumb.append(img);
+        thumb.addEventListener('click', () => {
+          imageEl.src = src;
+          imageEl.alt = productName;
+          thumbsEl.querySelectorAll('.qv-thumb').forEach((t) => t.classList.remove('active'));
+          thumb.classList.add('active');
+        });
+        thumbsEl.append(thumb);
+      });
+      thumbsEl.hidden = false;
+    }
+
+    function openModal(productName, images) {
       titleEl.textContent = productName;
       quantityInput.value = '1';
 
-      if (productImage) {
-        imageEl.src = productImage;
+      if (images.length) {
+        imageEl.src = images[0];
         imageEl.alt = productName;
         imageWrap.style.display = '';
       } else {
         imageEl.src = '';
         imageWrap.style.display = 'none';
       }
+      showThumbs(images, productName);
 
       lastFocused = document.activeElement;
       modal.classList.add('open');
@@ -73,9 +108,19 @@ const WHATSAPP_NUMBER = '51964525381';
     }
 
     document.addEventListener('click', (e) => {
-      const card = e.target.closest('.product-card');
+      // `.product-card` is the gallery card; `[data-qv-open]` is the generic
+      // hook used by the product lines on /productos, which carry several
+      // photos in data-product-images.
+      const card = e.target.closest('.product-card, [data-qv-open]');
       if (card) {
-        openModal(card.dataset.productName || 'Producto', card.dataset.productImage || '');
+        let images = [];
+        try {
+          images = JSON.parse(card.dataset.productImages || '[]');
+        } catch {
+          images = [];
+        }
+        if (!images.length && card.dataset.productImage) images = [card.dataset.productImage];
+        openModal(card.dataset.productName || 'Producto', images);
       }
       if (e.target.closest('[data-qv-close]')) {
         closeModal();
@@ -133,7 +178,10 @@ const WHATSAPP_NUMBER = '51964525381';
     width: 100%;
     max-width: 380px;
     margin: 1.5rem;
-    overflow: hidden;
+    /* The thumbnail strip makes the panel taller, so on short screens it
+       scrolls inside itself rather than spilling past the viewport. */
+    max-height: calc(100dvh - 3rem);
+    overflow: hidden auto;
     box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
     transform: scale(0.94) translateY(10px);
     transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
@@ -169,6 +217,9 @@ const WHATSAPP_NUMBER = '51964525381';
 
   /* Square frame to match the product photos, so the image fills it fully. */
   .qv-image-wrap {
+    position: relative;
+    /* Sizing context for the brand seal, which is expressed in cqw. */
+    container-type: inline-size;
     width: 100%;
     aspect-ratio: 1 / 1;
     display: flex;
@@ -181,6 +232,40 @@ const WHATSAPP_NUMBER = '51964525381';
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .qv-thumbs {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem 0;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  /* The thumbs are built in JS, so they never get Astro's scoping attribute —
+     they have to be reached with :global() from the scoped container. */
+  .qv-thumbs :global(.qv-thumb) {
+    flex: 0 0 auto;
+    width: 54px;
+    height: 54px;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--color-tint);
+    cursor: pointer;
+    opacity: 0.65;
+    transition: opacity 0.2s ease, border-color 0.2s ease;
+  }
+  .qv-thumbs :global(.qv-thumb img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .qv-thumbs :global(.qv-thumb:hover) { opacity: 1; }
+  .qv-thumbs :global(.qv-thumb.active) {
+    opacity: 1;
+    border-color: var(--color-accent);
   }
 
   .qv-body {

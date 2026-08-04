@@ -3,6 +3,8 @@ export const prerender = true;
 
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
+import { getClientLogo } from '../lib/catalog';
+import HeaderPattern from '../components/HeaderPattern.astro';
 import cajaArequipa from '../img/clientes/caja_arequipa.png';
 import poderJudicial from '../img/clientes/poder_judicial.png';
 import essalud from '../img/clientes/essalud.png';
@@ -97,70 +99,112 @@ const process = [
   },
 ];
 
-// Named clients grouped by sector.
+// Named clients grouped by sector. Each `slug` resolves to a logo in
+// src/img/clientes/<sector slug>/<slug>.webp; entries whose logo we don't have
+// yet simply render with the check mark instead.
 const clientDirectory = [
   {
+    slug: 'educativas',
     sector: 'Instituciones Educativas',
     items: [
-      'Colegio High School',
-      'Colegio Salesiano Santa Rosa',
-      'Colegio Andino',
-      'Colegio Claretiano',
-      'Colegio Ingeniería',
-      'Colegio Unión',
-      'Colegio San Juan Bosco',
-      'Colegio Zárate',
+      { slug: 'colegio-high-school', name: 'Colegio High School' },
+      { slug: 'colegio-salesiano-santa-rosa', name: 'Colegio Salesiano Santa Rosa' },
+      { slug: 'colegio-andino', name: 'Colegio Andino' },
+      { slug: 'colegio-claretiano', name: 'Colegio Claretiano' },
+      { slug: 'colegio-ingenieria', name: 'Colegio Ingeniería' },
+      { slug: 'colegio-union', name: 'Colegio Unión' },
+      { slug: 'colegio-san-juan-bosco', name: 'Colegio San Juan Bosco' },
+      { slug: 'colegio-zarate', name: 'Colegio Zárate' },
     ],
   },
   {
+    slug: 'salud',
     sector: 'Sector Salud',
     items: [
-      'Clínica Ortega',
-      'Clínica Confía Salud',
-      'Hospital Daniel Alcides Carrión',
-      'Hospital Ramiro Prialé Prialé (EsSalud)',
-      'Hospital El Carmen',
+      { slug: 'clinica-ortega', name: 'Clínica Ortega' },
+      { slug: 'clinica-confia-salud', name: 'Clínica Confía Salud' },
+      { slug: 'hospital-daniel-alcides-carrion', name: 'Hospital Daniel Alcides Carrión' },
+      { slug: 'hospital-ramiro-priale', name: 'Hospital Ramiro Prialé Prialé (EsSalud)' },
+      { slug: 'hospital-el-carmen', name: 'Hospital El Carmen' },
     ],
   },
   {
+    slug: 'financiero',
     sector: 'Sector Financiero',
-    items: ['Caja Huancayo', 'Caja Arequipa', 'Caja Piura', 'Financiera Confianza'],
+    items: [
+      { slug: 'caja-huancayo', name: 'Caja Huancayo' },
+      { slug: 'caja-arequipa', name: 'Caja Arequipa' },
+      { slug: 'caja-piura', name: 'Caja Piura' },
+      { slug: 'financiera-confianza', name: 'Financiera Confianza' },
+    ],
   },
   {
+    slug: 'publicas',
     sector: 'Instituciones Públicas',
     items: [
-      'Poder Judicial del Perú',
-      'Corte Superior de Justicia de la Selva Central',
-      'SAT de Huancayo (SATH)',
+      { slug: 'poder-judicial', name: 'Poder Judicial del Perú' },
+      { slug: 'corte-superior-selva-central', name: 'Corte Superior de Justicia de la Selva Central' },
+      { slug: 'sath', name: 'SAT de Huancayo (SATH)' },
     ],
   },
   {
+    slug: 'mineria',
     sector: 'Minería e Industria',
-    items: ['Volcan Compañía Minera S.A.A.', 'Minera Chinalco Perú S.A.', 'Compañía Minera Antamina S.A.'],
+    items: [
+      { slug: 'volcan', name: 'Volcan Compañía Minera S.A.A.' },
+      { slug: 'chinalco', name: 'Minera Chinalco Perú S.A.' },
+      { slug: 'antamina', name: 'Compañía Minera Antamina S.A.' },
+    ],
   },
   {
+    slug: 'construccion',
     sector: 'Construcción e Inmobiliario',
-    items: ['Golden Home Inmobiliaria', 'Besco S.A.C.', 'Los Portales S.A.'],
+    items: [
+      { slug: 'golden-home', name: 'Golden Home Inmobiliaria' },
+      { slug: 'besco', name: 'Besco S.A.C.' },
+      { slug: 'los-portales', name: 'Los Portales S.A.' },
+    ],
   },
   {
+    slug: 'transporte',
     sector: 'Transporte y Logística',
-    items: ['Transportes Nacionales S.A. – TRANSA', 'Cruz del Sur', 'Transportes Línea S.A.'],
+    items: [
+      { slug: 'transa', name: 'Transportes Nacionales S.A. – TRANSA' },
+      { slug: 'cruz-del-sur', name: 'Cruz del Sur' },
+      { slug: 'transportes-linea', name: 'Transportes Línea S.A.' },
+    ],
   },
   {
+    slug: 'hoteleria',
     sector: 'Hotelería y Turismo',
-    items: ['Compañía Hotelera del Centro', 'Hotel Presidente Huancayo', 'Hotel Gran Palma Huancayo'],
+    items: [
+      { slug: 'hotelera-del-centro', name: 'Compañía Hotelera del Centro' },
+      { slug: 'hotel-presidente', name: 'Hotel Presidente Huancayo' },
+      { slug: 'hotel-gran-palma', name: 'Hotel Gran Palma Huancayo' },
+    ],
   },
   {
+    slug: 'automotrices',
     sector: 'Empresas Automotrices',
-    items: ['Toyota del Perú', 'Derco Perú', 'Honda del Perú'],
+    items: [
+      { slug: 'toyota', name: 'Toyota del Perú' },
+      { slug: 'derco', name: 'Derco Perú' },
+      { slug: 'honda', name: 'Honda del Perú' },
+    ],
   },
   {
+    slug: 'privadas',
     sector: 'Empresas Privadas',
-    items: ['Golden Home Inmobiliaria', 'Club La Salle', 'Transportes Nacionales S.A. – TRANSA'],
+    items: [
+      { slug: 'golden-home', name: 'Golden Home Inmobiliaria' },
+      { slug: 'club-la-salle', name: 'Club La Salle' },
+      { slug: 'transa', name: 'Transportes Nacionales S.A. – TRANSA' },
+    ],
   },
   {
+    slug: 'retail',
     sector: 'Supermercados y Retail',
-    items: ['Mass'],
+    items: [{ slug: 'mass', name: 'Mass' }],
   },
 ];
 ---
@@ -170,6 +214,7 @@ const clientDirectory = [
   description="Instituciones educativas, clínicas, hospitales, cajas, mineras y empresas líderes del Perú confían en FAIR'S COMPANY para sus uniformes y prendas personalizadas. Conoce los sectores que atendemos."
 >
   <div class="page-header scroll-animate">
+    <HeaderPattern />
     <div class="container">
       <h1>Nuestros Clientes</h1>
       <p>Marcas e instituciones de prestigio confían en nosotros.</p>
@@ -260,12 +305,21 @@ const clientDirectory = [
           <div class={`directory-card scroll-animate animate-delay-${(i % 3) + 1}`}>
             <h3 class="directory-sector">{group.sector}</h3>
             <ul class="directory-list">
-              {group.items.map((name) => (
-                <li>
-                  <svg class="directory-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-                  <span>{name}</span>
-                </li>
-              ))}
+              {group.items.map((item) => {
+                const logo = getClientLogo(group.slug, item.slug);
+                return (
+                  <li>
+                    {logo ? (
+                      <span class="directory-logo">
+                        <Image src={logo} width={80} alt={`Logo de ${item.name}`} loading="lazy" />
+                      </span>
+                    ) : (
+                      <svg class="directory-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                    )}
+                    <span>{item.name}</span>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         ))}
@@ -511,8 +565,8 @@ const clientDirectory = [
   }
   .directory-list li {
     display: flex;
-    align-items: flex-start;
-    gap: 0.6rem;
+    align-items: center;
+    gap: 0.75rem;
     font-size: 0.94rem;
     line-height: 1.4;
     color: #444;
@@ -522,7 +576,30 @@ const clientDirectory = [
     height: 16px;
     color: var(--color-accent);
     flex-shrink: 0;
-    margin-top: 0.15rem;
+    margin: 0 0.35rem;
+  }
+
+  /* The logos arrive with very different backgrounds — some transparent, some
+     a solid coloured square — so each sits contained in the same white tile. */
+  .directory-logo {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    background: #fff;
+    border: 1px solid #ece7e3;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .directory-logo :global(img) {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
   }
 
   /* Existing client-logo cards */

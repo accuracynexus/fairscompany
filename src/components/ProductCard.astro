@@ -1,4 +1,6 @@
 ---
+import PhotoBadge from './PhotoBadge.astro';
+
 interface Props {
   name: string;
   category?: string | null;
@@ -18,6 +20,7 @@ const { name, category, image, animateClass = '' } = Astro.props;
 >
   <span class="product-card-image">
     {image && <img src={image} alt={name} loading="lazy" />}
+    {image && <PhotoBadge />}
     <span class="product-card-overlay">
       <span class="overlay-text">Click para vista rápida</span>
     </span>
@@ -54,6 +57,8 @@ const { name, category, image, animateClass = '' } = Astro.props;
      showing through behind the photo's own backdrop. */
   .product-card-image {
     position: relative;
+    /* Sizing context for the brand seal, which is expressed in cqw. */
+    container-type: inline-size;
     display: block;
     width: 100%;
     aspect-ratio: 1 / 1;

@@ -2,13 +2,14 @@
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import { getAllProducts, resolveProductImage, getCategoryImages } from '../../db/client';
 import { categories } from '../../lib/categories';
+import { categoryCovers } from '../../lib/catalog';
 
 export const prerender = false;
 
 const error = Astro.url.searchParams.get('error');
 const products = getAllProducts();
 
-// Category images: admin override → default seeded photo → icon placeholder.
+// Category images: admin override → category cover photo → icon placeholder.
 const categoryOverrides = getCategoryImages();
 const categoryList = categories.map((cat) => ({
   key: cat.key,
@@ -16,7 +17,7 @@ const categoryList = categories.map((cat) => ({
   name: cat.name,
   icon: cat.icon,
   overridden: !!categoryOverrides[cat.key],
-  image: categoryOverrides[cat.key] ?? resolveProductImage(cat.imageSeed),
+  image: categoryOverrides[cat.key] ?? categoryCovers[cat.key],
 }));
 ---
 

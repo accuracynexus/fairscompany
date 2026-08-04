@@ -98,11 +98,21 @@ img {
 }
 
 .page-header {
+  position: relative;
+  /* Clips the decorative weave in <HeaderPattern />, whose seam runs bleed
+     past both edges on purpose. */
+  overflow: hidden;
   padding: 8rem 0 4rem;
   text-align: center;
   background-color: var(--color-bg-dark);
   color: var(--color-text-light);
   margin-bottom: 4rem;
+}
+
+/* Title and lede ride above the pattern. */
+.page-header > .container {
+  position: relative;
+  z-index: 1;
 }
 
 .page-header h1 {

@@ -23,6 +23,11 @@ data/
 # admin-uploaded images
 /uploads/
 
+# raw image drops (~123 MB) — the web-ready assets in src/img/catalogo and
+# src/img/clientes are generated from these by scripts/normalize-assets.mjs
+src/img/PRODUCTOS-todos/
+src/img/CLIENTES-todos/
+
 # macOS-specific files
 .DS_Store
 
