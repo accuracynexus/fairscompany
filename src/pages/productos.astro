@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import ProductCard from '../components/ProductCard.astro';
 import PhotoBadge from '../components/PhotoBadge.astro';
 import HeaderPattern from '../components/HeaderPattern.astro';
-import { getActiveProducts, resolveProductImage, getCategoryImages } from '../db/client';
+import { getActiveProducts, resolveProductImage, getCategoryImages, getLineImageOverrides } from '../db/client';
 import { categories } from '../lib/categories';
 import { categoryCovers, lineImageSrcs } from '../lib/catalog';
 
@@ -17,7 +17,13 @@ const categoryOverrides = getCategoryImages();
 const categoryImage = (cat: (typeof categories)[number]) =>
   categoryOverrides[cat.key] ?? categoryCovers[cat.key];
 
-const lineImages = (categoryKey: string, line: string) => lineImageSrcs[categoryKey]?.[line] ?? [];
+// A line shows the admin's uploaded image when there is one, otherwise every
+// photo indexed for it from src/img/catalogo.
+const lineOverrides = getLineImageOverrides();
+const lineImages = (categoryKey: string, line: string) => {
+  const override = lineOverrides[`${categoryKey}/${line}`];
+  return override ? [override] : (lineImageSrcs[categoryKey]?.[line] ?? []);
+};
 ---
 
 <Layout

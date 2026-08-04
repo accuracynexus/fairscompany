@@ -10,31 +10,131 @@ interface Props {
 const { title } = Astro.props;
 
 const favicon = await getImage({ src: brandMark, width: 256, format: 'png' });
+
+// `/admin` has to match exactly or it would light up on every sub-page.
+const { pathname } = Astro.url;
+const navLinks = [
+  { href: '/admin', label: 'Inicio', exact: true },
+  { href: '/admin/banners', label: 'Banners', exact: false },
+  { href: '/admin/productos', label: 'Productos', exact: false },
+];
+const isActive = (link: (typeof navLinks)[number]) =>
+  link.exact ? pathname === link.href || pathname === `${link.href}/` : pathname.startsWith(link.href);
 ---
 
 <!doctype html>
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/png" href={favicon.src} />
     <title>{title} | Fair's Company Admin</title>
   </head>
   <body class="admin-body">
     <header class="admin-topbar">
       <a href="/admin" class="admin-brand">FAIR'S COMPANY <span>Admin</span></a>
-      <nav>
-        <a href="/admin/banners">Banners</a>
-        <a href="/admin/productos">Productos</a>
-        <a href="/" target="_blank" rel="noopener noreferrer">Ver sitio ↗</a>
+
+      <nav class="admin-nav" aria-label="Secciones del panel">
+        <div class="admin-nav-links">
+          {navLinks.map((link) => (
+            <a
+              href={link.href}
+              class={isActive(link) ? 'admin-nav-link is-active' : 'admin-nav-link'}
+              aria-current={isActive(link) ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          ))}
+          <a class="admin-nav-link" href="/" target="_blank" rel="noopener noreferrer">Ver sitio ↗</a>
+        </div>
         <form method="POST" action="/api/admin/logout" class="logout-form">
           <button type="submit">Cerrar sesión</button>
         </form>
       </nav>
+
+      <button
+        class="admin-menu-btn"
+        id="admin-menu-toggle"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+        aria-controls="admin-drawer"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </header>
+
+    <div class="admin-drawer-backdrop" id="admin-drawer-backdrop"></div>
+
+    <nav class="admin-drawer" id="admin-drawer" aria-label="Menú del panel" aria-hidden="true">
+      <button class="admin-drawer-close" id="admin-drawer-close" aria-label="Cerrar menú">
+        <span></span>
+        <span></span>
+      </button>
+      <ul>
+        {navLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class={isActive(link) ? 'is-active' : ''}
+              aria-current={isActive(link) ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+        <li><a href="/" target="_blank" rel="noopener noreferrer">Ver sitio ↗</a></li>
+      </ul>
+      <form method="POST" action="/api/admin/logout" class="logout-form drawer-logout">
+        <button type="submit">Cerrar sesión</button>
+      </form>
+    </nav>
     <main class="admin-main">
       <slot />
     </main>
+
+    <script>
+      const toggle = document.getElementById('admin-menu-toggle');
+      const drawer = document.getElementById('admin-drawer');
+      const backdrop = document.getElementById('admin-drawer-backdrop');
+      const closeBtn = document.getElementById('admin-drawer-close');
+
+      function openDrawer() {
+        drawer?.classList.add('active');
+        backdrop?.classList.add('active');
+        toggle?.classList.add('open');
+        toggle?.setAttribute('aria-expanded', 'true');
+        drawer?.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeDrawer() {
+        drawer?.classList.remove('active');
+        backdrop?.classList.remove('active');
+        toggle?.classList.remove('open');
+        toggle?.setAttribute('aria-expanded', 'false');
+        drawer?.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      toggle?.addEventListener('click', () => {
+        drawer?.classList.contains('active') ? closeDrawer() : openDrawer();
+      });
+      closeBtn?.addEventListener('click', closeDrawer);
+      backdrop?.addEventListener('click', closeDrawer);
+      drawer?.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeDrawer));
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && drawer?.classList.contains('active')) closeDrawer();
+      });
+
+      // Resizing back to the desktop layout hides the drawer, so drop the
+      // scroll lock it left on the body.
+      window.matchMedia('(min-width: 861px)').addEventListener('change', (e) => {
+        if (e.matches) closeDrawer();
+      });
+    </script>
   </body>
 </html>
 
@@ -61,18 +161,43 @@ const favicon = await getImage({ src: brandMark, width: 256, format: 'png' });
     font-size: 1.1rem;
   }
   .admin-brand span { color: var(--color-accent); }
-  .admin-topbar nav {
+  .admin-nav {
     display: flex;
     align-items: center;
     gap: 1.5rem;
     font-size: 0.85rem;
   }
-  .admin-topbar nav a {
+  .admin-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .admin-nav-link {
+    position: relative;
     color: #ccc;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    padding: 0.35rem 0;
+    white-space: nowrap;
   }
-  .admin-topbar nav a:hover { color: var(--color-accent); }
+  .admin-nav-link:hover { color: var(--color-accent); }
+
+  /* Current section: coloured plus an underline, so it doesn't rely on colour
+     alone to be legible. */
+  .admin-nav-link.is-active {
+    color: #fff;
+    font-weight: 600;
+  }
+  .admin-nav-link.is-active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.15rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-accent);
+  }
   .logout-form button {
     background: none;
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -170,16 +295,123 @@ const favicon = await getImage({ src: brandMark, width: 256, format: 'png' });
     border: 1px solid #ccc;
   }
 
+  /* Hamburger — mirrors the public site's header so both behave the same. */
+  .admin-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0.25rem;
+    /* Below the drawer (1002): open, the button is itself an X and sits right
+       where the drawer's close button lands, so it has to be painted over
+       instead of showing through as a second X. */
+    z-index: 1000;
+  }
+  .admin-menu-btn span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background-color: #fff;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+  }
+  .admin-menu-btn.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .admin-menu-btn.open span:nth-child(2) { opacity: 0; }
+  .admin-menu-btn.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+  .admin-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+  }
+  .admin-drawer-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .admin-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100dvh;
+    width: min(300px, 80vw);
+    background: var(--color-header);
+    box-shadow: -12px 0 40px rgba(0, 0, 0, 0.4);
+    z-index: 1002;
+    padding: 5.5rem 1.6rem 2rem;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .admin-drawer.active { transform: translateX(0); }
+
+  .admin-drawer-close {
+    position: absolute;
+    top: 1.4rem;
+    right: 1.4rem;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .admin-drawer-close span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 2px;
+    background: #fff;
+  }
+  .admin-drawer-close span:nth-child(1) { transform: translate(-50%, -50%) rotate(45deg); }
+  .admin-drawer-close span:nth-child(2) { transform: translate(-50%, -50%) rotate(-45deg); }
+
+  .admin-drawer ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .admin-drawer a {
+    display: block;
+    padding: 0.85rem 0.4rem;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ccc;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+  .admin-drawer a.is-active {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+  .drawer-logout button { width: 100%; }
+
+  @media (max-width: 860px) {
+    .admin-topbar { padding: 0.9rem 1.25rem; }
+    /* The inline nav gives way to the drawer. */
+    .admin-nav { display: none; }
+    .admin-menu-btn { display: flex; }
+  }
+
+  @media (min-width: 861px) {
+    .admin-drawer,
+    .admin-drawer-backdrop { display: none; }
+  }
+
   @media (max-width: 640px) {
-    .admin-topbar {
-      padding: 1rem 1.25rem;
-      justify-content: flex-start;
-    }
-    .admin-topbar nav {
-      width: 100%;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
+    .admin-brand { font-size: 1rem; }
     .admin-main {
       padding: 2rem 1.25rem;
     }

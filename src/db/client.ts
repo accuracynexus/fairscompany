@@ -86,6 +86,16 @@ db.exec(`
     key TEXT PRIMARY KEY,
     image_url TEXT NOT NULL
   );
+
+  -- Optional image override per product line (the sub-categories listed under
+  -- each category in src/lib/categories.ts). Absent means the line shows the
+  -- photos indexed from src/img/catalogo by src/lib/catalog.ts.
+  CREATE TABLE IF NOT EXISTS line_images (
+    category_key TEXT NOT NULL,
+    line_slug TEXT NOT NULL,
+    image_url TEXT NOT NULL,
+    PRIMARY KEY (category_key, line_slug)
+  );
 `);
 
 // Migration: the two editable hero slides carry an overlaid subtitle and a
@@ -333,6 +343,27 @@ export function setCategoryImage(key: string, imageUrl: string): void {
 
 export function deleteCategoryImage(key: string): void {
   db.prepare('DELETE FROM category_images WHERE key = ?').run(key);
+}
+
+// Product-line image overrides, keyed "<category key>/<line slug>" so a page can
+// look one up in a single map read.
+export function getLineImageOverrides(): Record<string, string> {
+  const rows = db.prepare('SELECT category_key, line_slug, image_url FROM line_images').all() as {
+    category_key: string;
+    line_slug: string;
+    image_url: string;
+  }[];
+  return Object.fromEntries(rows.map((r) => [`${r.category_key}/${r.line_slug}`, r.image_url]));
+}
+
+export function setLineImage(categoryKey: string, lineSlug: string, imageUrl: string): void {
+  db.prepare(
+    'INSERT INTO line_images (category_key, line_slug, image_url) VALUES (?, ?, ?) ON CONFLICT(category_key, line_slug) DO UPDATE SET image_url = excluded.image_url'
+  ).run(categoryKey, lineSlug, imageUrl);
+}
+
+export function deleteLineImage(categoryKey: string, lineSlug: string): void {
+  db.prepare('DELETE FROM line_images WHERE category_key = ? AND line_slug = ?').run(categoryKey, lineSlug);
 }
 
 export function getActiveMobileBanners(): Banner[] {

@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import db, { setCategoryImage, deleteCategoryImage } from '../../../db/client';
+import db, { setCategoryImage, deleteCategoryImage, setLineImage, deleteLineImage } from '../../../db/client';
 import { saveUploadedImage } from '../../../lib/upload';
 
 export const prerender = false;
@@ -36,6 +36,36 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     return redirect('/admin/productos');
   }
 
+  // Product-line (sub-category) image: upload an override, or reset back to the
+  // photos that ship with the catalogue.
+  if (action === 'save_line_image') {
+    const categoryKey = String(form.get('category_key') ?? '').trim();
+    const lineSlug = String(form.get('line_slug') ?? '').trim();
+    if (!categoryKey || !lineSlug) {
+      return redirect('/admin/productos?error=L%C3%ADnea+no+v%C3%A1lida');
+    }
+
+    if (form.get('reset')) {
+      deleteLineImage(categoryKey, lineSlug);
+      return redirect(`/admin/productos?abrir=${encodeURIComponent(categoryKey)}`);
+    }
+
+    const imageFile = form.get('image') as File | null;
+    if (!imageFile || imageFile.size === 0) {
+      return redirect('/admin/productos?error=Selecciona+una+imagen+para+la+l%C3%ADnea');
+    }
+
+    try {
+      const imageUrl = await saveUploadedImage(imageFile);
+      setLineImage(categoryKey, lineSlug, imageUrl);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'No se pudo subir la imagen';
+      return redirect(`/admin/productos?error=${encodeURIComponent(message)}`);
+    }
+
+    return redirect(`/admin/productos?abrir=${encodeURIComponent(categoryKey)}`);
+  }
+
   if (action === 'add') {
     const name = String(form.get('name') ?? '').trim();
     const category = String(form.get('category') ?? '').trim() || null;
@@ -46,7 +76,18 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       return redirect('/admin/productos?error=El+nombre+es+obligatorio');
     }
 
-    const imageUrl = imageFile && imageFile.size > 0 ? await saveUploadedImage(imageFile) : null;
+    // saveUploadedImage throws on a disallowed format; without this the request
+    // 500s instead of returning the message the panel knows how to display.
+    let imageUrl: string | null = null;
+    try {
+      if (imageFile && imageFile.size > 0) {
+        imageUrl = await saveUploadedImage(imageFile);
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'No se pudo subir la imagen';
+      return redirect(`/admin/productos?error=${encodeURIComponent(message)}`);
+    }
+
     const maxOrder = db.prepare('SELECT MAX(sort_order) as m FROM products').get() as { m: number | null };
 
     db.prepare(
@@ -69,7 +110,13 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     }
 
     if (imageFile && imageFile.size > 0) {
-      const imageUrl = await saveUploadedImage(imageFile);
+      let imageUrl: string;
+      try {
+        imageUrl = await saveUploadedImage(imageFile);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'No se pudo subir la imagen';
+        return redirect(`/admin/productos?error=${encodeURIComponent(message)}`);
+      }
       db.prepare(
         'UPDATE products SET name = ?, category = ?, description = ?, active = ?, image_url = ? WHERE id = ?'
       ).run(name, category, description, active, imageUrl, id);
