@@ -4,14 +4,14 @@ import type { Banner } from '../db/client';
 // Baked default images for the 4 hero slides (desktop + mobile/responsive).
 // Slides 1 & 2 ("cambiantes") have an empty area for the editable text overlay;
 // slides 3 & 4 ("fijas") are self-contained designs with baked-in text.
-import slide1Desktop from '../img/hero/slide-1-personas.png';
-import slide1Mobile from '../img/hero/slide-1-personas-mobile.png';
-import slide2Desktop from '../img/hero/slide-2-obrero.png';
-import slide2Mobile from '../img/hero/slide-2-obrero-mobile.png';
-import slide3Desktop from '../img/hero/slide-3-experiencia.png';
-import slide3Mobile from '../img/hero/slide-3-experiencia-mobile.png';
-import slide4Desktop from '../img/hero/slide-4-peru.png';
-import slide4Mobile from '../img/hero/slide-4-peru-mobile.png';
+import slide1Desktop from '../img/hero/slide-1-personas.jpg';
+import slide1Mobile from '../img/hero/slide-1-personas-mobile.jpg';
+import slide2Desktop from '../img/hero/slide-2-obrero.jpg';
+import slide2Mobile from '../img/hero/slide-2-obrero-mobile.jpg';
+import slide3Desktop from '../img/hero/slide-3-experiencia.jpg';
+import slide3Mobile from '../img/hero/slide-3-experiencia-mobile.jpg';
+import slide4Desktop from '../img/hero/slide-4-peru.jpg';
+import slide4Mobile from '../img/hero/slide-4-peru-mobile.jpg';
 
 const BAKED: { desktop: ImageMetadata; mobile: ImageMetadata }[] = [
   { desktop: slide1Desktop, mobile: slide1Mobile },

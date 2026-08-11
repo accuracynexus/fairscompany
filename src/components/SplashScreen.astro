@@ -1,7 +1,7 @@
 ---
 import { getImage, Image } from 'astro:assets';
 import splashLogo from '../img/logo/logo-splash.png';
-import splashBg from '../img/logo/fondo-splash.png';
+import splashBg from '../img/logo/fondo-splash.jpg';
 
 const bg = await getImage({ src: splashBg, width: 1920, format: 'webp', quality: 80 });
 ---
@@ -9,7 +9,10 @@ const bg = await getImage({ src: splashBg, width: 1920, format: 'webp', quality:
 <div id="splash-screen" class="splash" role="status" aria-live="polite" aria-label="Cargando" style={`background-image: url('${bg.src}')`}>
   <div class="splash-inner">
     <div class="splash-logo">
-      <Image src={splashLogo} width={1765} height={1170} alt="Fair's Company" loading="eager" />
+      {/* The CSS caps this at 230px wide, so generating the source's full
+          1765px shipped ~345 KB to paint a 210px logo. 560px covers the
+          largest display size at ~2.4x for high-density screens. */}
+      <Image src={splashLogo} width={560} height={371} alt="Fair's Company" loading="eager" />
     </div>
 
     <div class="splash-bar" aria-hidden="true">

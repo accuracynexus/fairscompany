@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import logoPositivo from '../img/logo/logo-positivo.png';
+import logoHeader from '../img/logo/FAIRS_COMPANY_off.png';
 
 const pathname = Astro.url.pathname;
 const links = [
@@ -15,7 +15,7 @@ const links = [
 <header class="header" id="site-header">
   <div class="container header-content">
     <a href="/" class="logo" aria-label="Fair's Company — Inicio">
-      <Image src={logoPositivo} width={2360} height={595} alt="Fair's Company" class="logo-img" loading="eager" />
+      <Image src={logoHeader} alt="Fair's Company" class="logo-img" loading="eager" />
     </a>
 
     <nav class="desktop-nav">
@@ -155,9 +155,10 @@ const links = [
   }
 
   .logo-img {
-    height: 38px;
+    height: 48px;
     width: auto;
     display: block;
+    object-fit: contain;
   }
 
   .desktop-nav ul {
@@ -311,7 +312,7 @@ const links = [
 
   @media (max-width: 900px) {
     .logo-img {
-      height: 32px;
+      height: 38px;
     }
   }
 

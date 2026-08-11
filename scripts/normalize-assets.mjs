@@ -32,13 +32,12 @@ const CATEGORIES = [
     key: 'escolares',
     dir: 'UNIFORMES PARA COLEGIOS E INSTITUCIONES PÚBLICAS Y PRIVADAS',
     items: [
-      { slug: 'uniformes-escolares', name: 'Uniformes escolares', dir: 'Uniformes escolares' },
-      { slug: 'buzos-deportivos', name: 'Buzos deportivos', dir: 'Buzos deportivos' },
-      { slug: 'polos-institucionales', name: 'Polos institucionales', dir: 'Polos institucionales' },
+      { slug: 'casacas-escolares', name: 'Casacas escolares', dir: 'Casacas escolares' },
+      { slug: 'buzos-escolares', name: 'Buzos escolares', dir: 'Buzos escolares' },
+      { slug: 'chalecos-escolares', name: 'Chalecos escolares', dir: 'Chalecos' },
       { slug: 'camisas-escolares', name: 'Camisas escolares', dir: 'Camisas escolares' },
-      { slug: 'casacas-institucionales', name: 'Casacas institucionales', dir: 'Casacas institucionales' },
-      { slug: 'chalecos', name: 'Chalecos', dir: 'Chalecos' },
       { slug: 'pantalones-faldas', name: 'Pantalones y faldas escolares', dir: 'Pantalones y faldas escolares' },
+      { slug: 'polos-escolares', name: 'Polos escolares', dir: 'Polos escolares' },
     ],
   },
   {
@@ -48,8 +47,6 @@ const CATEGORIES = [
       { slug: 'casacas-promocion', name: 'Casacas de promoción', dir: 'Casacas de promoción' },
       { slug: 'poleras-promocion', name: 'Poleras de promoción', dir: 'Poleras de promoción' },
       { slug: 'polos-promocion', name: 'Polos de promoción', dir: 'Polos de promoción' },
-      { slug: 'buzos-promocion', name: 'Buzos de promoción', dir: null },
-      { slug: 'chalecos-promocion', name: 'Chalecos de promoción', dir: null },
     ],
   },
   {

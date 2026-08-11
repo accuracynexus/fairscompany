@@ -154,7 +154,11 @@ if (heroSeedRow?.value !== HERO_SEED_VERSION) {
   ).run(HERO_SEED_VERSION);
 }
 
-const PRODUCTS_SEED_VERSION = '4';
+// Bumped to 5: the gallery on /productos shows the first twelve by sort_order,
+// so the array order below decides what it displays. The generic pieces (buzos
+// y casacas sin marca visible) moved to the tail and the garments that carry a
+// readable school or institution name took their place.
+const PRODUCTS_SEED_VERSION = '5';
 const seedVersionRow = db.prepare("SELECT value FROM meta WHERE key = 'products_seed_version'").get() as
   | { value: string }
   | undefined;
@@ -198,22 +202,22 @@ if (seedVersionRow?.value !== PRODUCTS_SEED_VERSION) {
       description: 'Casaca institucional con diseño bicolor y escudo bordado.',
     },
     {
-      name: 'Pantalón Buzo Poder Judicial',
+      name: 'Casaca Deportiva Colegios Zárate',
+      category: 'Colegios',
+      image_url: 'seed:15',
+      description: 'Casaca deportiva tricolor a juego con el uniforme del colegio.',
+    },
+    {
+      name: 'Casaca Bomber Institucional',
       category: 'Instituciones',
-      image_url: 'seed:7',
-      description: 'Pantalón buzo cómodo con logo institucional.',
+      image_url: 'seed:14',
+      description: 'Casaca bomber en paño con escudo bordado.',
     },
     {
-      name: 'Casaca Deportiva Bicolor',
-      category: 'Deportivo',
-      image_url: 'seed:8',
-      description: 'Casaca deportiva ligera en dos tonos.',
-    },
-    {
-      name: 'Pantalón Buzo Deportivo',
-      category: 'Deportivo',
-      image_url: 'seed:9',
-      description: 'Pantalón buzo deportivo con bolsillos laterales.',
+      name: 'Polo Manga Larga Colegio Claretiano',
+      category: 'Colegios',
+      image_url: 'seed:19',
+      description: 'Polo manga larga con estampado institucional.',
     },
     {
       name: 'Uniforme Clínico Confiesalud',
@@ -240,28 +244,10 @@ if (seedVersionRow?.value !== PRODUCTS_SEED_VERSION) {
       description: 'Casaca varsity personalizada para promociones escolares.',
     },
     {
-      name: 'Casaca Bomber Institucional',
-      category: 'Instituciones',
-      image_url: 'seed:14',
-      description: 'Casaca bomber en paño con escudo bordado.',
-    },
-    {
-      name: 'Casaca Deportiva Colegios Zárate',
-      category: 'Colegios',
-      image_url: 'seed:15',
-      description: 'Casaca deportiva tricolor a juego con el uniforme del colegio.',
-    },
-    {
       name: 'Casaca Softshell Corporativa',
       category: 'Empresas',
       image_url: 'seed:16',
       description: 'Casaca softshell resistente al viento con logo bordado.',
-    },
-    {
-      name: 'Polerón Deportivo Bicolor',
-      category: 'Deportivo',
-      image_url: 'seed:17',
-      description: 'Polerón con capucha y mangas en contraste.',
     },
     {
       name: 'Casaca Varsity Verde',
@@ -270,10 +256,28 @@ if (seedVersionRow?.value !== PRODUCTS_SEED_VERSION) {
       description: 'Casaca varsity personalizada con letra bordada.',
     },
     {
-      name: 'Polo Manga Larga Colegio Claretiano',
-      category: 'Colegios',
-      image_url: 'seed:19',
-      description: 'Polo manga larga con estampado institucional.',
+      name: 'Pantalón Buzo Poder Judicial',
+      category: 'Instituciones',
+      image_url: 'seed:7',
+      description: 'Pantalón buzo cómodo con logo institucional.',
+    },
+    {
+      name: 'Casaca Deportiva Bicolor',
+      category: 'Deportivo',
+      image_url: 'seed:8',
+      description: 'Casaca deportiva ligera en dos tonos.',
+    },
+    {
+      name: 'Pantalón Buzo Deportivo',
+      category: 'Deportivo',
+      image_url: 'seed:9',
+      description: 'Pantalón buzo deportivo con bolsillos laterales.',
+    },
+    {
+      name: 'Polerón Deportivo Bicolor',
+      category: 'Deportivo',
+      image_url: 'seed:17',
+      description: 'Polerón con capucha y mangas en contraste.',
     },
   ];
 

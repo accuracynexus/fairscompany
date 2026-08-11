@@ -9,8 +9,15 @@ import { categoryCovers, lineImageSrcs } from '../lib/catalog';
 
 export const prerender = false;
 
-const WHATSAPP_NUMBER = '51964525381';
-const products = getActiveProducts();
+const WHATSAPP_NUMBER = '51934336181';
+
+// The gallery is a showcase, not the full catalogue: it shows the first dozen
+// active products so the grid stays four tidy rows of three instead of running
+// on. Purely a display cap — nothing is deactivated, and the products it leaves
+// out still appear everywhere else. Reordering in the admin panel (sort_order)
+// is what decides which twelve make the cut.
+const GALLERY_LIMIT = 12;
+const products = getActiveProducts().slice(0, GALLERY_LIMIT);
 
 // Category image = admin override (if any) → cover photo of the category → icon.
 const categoryOverrides = getCategoryImages();
@@ -28,7 +35,7 @@ const lineImages = (categoryKey: string, line: string) => {
 
 <Layout
   title="Productos"
-  description="Catálogo de uniformes y prendas personalizadas: escolares, de promoción, corporativos, médicos, industriales/EPP, hotelería, gastronomía y merchandising. Diseño, bordado y estampado a medida en todo el Perú."
+  description="Catálogo de uniformes y prendas personalizadas: escolares, de promoción, corporativos, médicos, industriales para minería y construcción, hotelería, gastronomía y merchandising. Diseño, bordado y estampado a medida en todo el Perú."
 >
   <div class="page-header scroll-animate">
     <HeaderPattern />
