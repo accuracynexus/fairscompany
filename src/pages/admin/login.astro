@@ -2,6 +2,7 @@
 import { getImage } from 'astro:assets';
 import '../../styles/global.css';
 import brandMark from '../../img/logo/logo-splash.png';
+import HeaderPattern from '../../components/HeaderPattern.astro';
 
 export const prerender = false;
 
@@ -19,6 +20,7 @@ const favicon = await getImage({ src: brandMark, width: 256, format: 'png' });
   </head>
   <body>
     <main class="login-page">
+      <HeaderPattern />
       <form class="login-card" method="POST" action="/api/admin/login">
         <h1>FAIR'S COMPANY</h1>
         <p class="subtitle">Panel de administración</p>
@@ -42,14 +44,18 @@ const favicon = await getImage({ src: brandMark, width: 256, format: 'png' });
 
 <style>
   .login-page {
+    position: relative;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--color-bg-dark);
     padding: 2rem;
+    overflow: hidden;
   }
   .login-card {
+    position: relative;
+    z-index: 1;
     background: #ffffff;
     padding: 3rem 2.5rem;
     border-radius: 10px;
