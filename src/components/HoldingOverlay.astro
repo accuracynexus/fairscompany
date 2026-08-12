@@ -13,7 +13,7 @@ interface Props {
   isLocked?: boolean;
 }
 
-const { isLocked = true } = Astro.props;
+const { isLocked = false } = Astro.props;
 ---
 
 {isLocked && (
