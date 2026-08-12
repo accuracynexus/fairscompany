@@ -4,6 +4,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SplashScreen from '../components/SplashScreen.astro';
+import HoldingOverlay from '../components/HoldingOverlay.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
 import QuickViewModal from '../components/QuickViewModal.astro';
 import brandMark from '../img/logo/logo-splash.png';
@@ -147,6 +148,7 @@ const structuredData = {
 		<script src="https://unpkg.com/reicon/cdn/reicon.js"></script>
 	</head>
 	<body>
+		<HoldingOverlay />
 		<SplashScreen />
 		<Header />
 		<main>
