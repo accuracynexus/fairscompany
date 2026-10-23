@@ -17,6 +17,10 @@ pnpm-debug.log*
 .env
 .env.production
 
+# local tool settings (may hold admin credentials) — the shared
+# .claude/launch.json and .vscode/ configs are versioned on purpose
+.claude/settings.local.json
+
 # local database
 data/
 
